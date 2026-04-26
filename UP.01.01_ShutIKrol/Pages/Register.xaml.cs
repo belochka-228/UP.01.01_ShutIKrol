@@ -12,19 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using UP._01._01_ShutIKrol.Pages;
 
-namespace UP._01._01_ShutIKrol
+namespace UP._01._01_ShutIKrol.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для Register.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Register : Page
     {
-        public MainWindow()
+        public Register()
         {
             InitializeComponent();
-            MainFrame.Navigate(new LoginPage());
         }
     }
 }
