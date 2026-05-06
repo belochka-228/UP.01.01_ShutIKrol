@@ -24,25 +24,32 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             InitializeComponent();
         }
-
         private void AutoButton_Click(object sender, RoutedEventArgs e)
         {
-            string username = txtUser.Text.Trim(); 
-            string password = txtPassword.Password; 
+            string login = txtUser.Text.Trim();
+            string password = txtPassword.Password;
 
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
-                MessageBox.Show("Авторизация прошла успешно!");
+                MessageBox.Show("Заполните логин и пароль.");
+                return;
             }
-            else
+
+            var user = Core.Context.Users.Include("Roles").FirstOrDefault(u => u.Login == login && u.Password == password);
+
+            if (user == null)
             {
-                MessageBox.Show("Введите логин/пароль");
+                MessageBox.Show("Неверный логин или пароль.");
+                return;
             }
+            UserData.CurrentUser = user;
+
+            var mainWindow = Application.Current.MainWindow as MainWindow;
+            mainWindow?.MainFrame.Navigate(new MainPage());
         }
-
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(typeof(Register));  
+            NavigationService?.Navigate(new Register());
         }
     }
 }

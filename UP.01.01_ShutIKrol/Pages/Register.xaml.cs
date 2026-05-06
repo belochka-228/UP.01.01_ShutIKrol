@@ -24,5 +24,67 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             InitializeComponent();
         }
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            string login = txtLogin.Text.Trim();
+            string displayName = txtDisplayName.Text.Trim();
+            string email = txtEmail.Text.Trim();
+            string password = txtPassword.Password;
+            string passwordConfirm = txtPasswordConfirm.Password;
+
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(displayName) ||
+                string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(passwordConfirm))
+            {
+                MessageBox.Show("Все поля обязательны для заполнения.", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (password != passwordConfirm)
+            {
+                MessageBox.Show("Пароли не совпадают.", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (Core.Context.Users.Any(u => u.Login == login))
+            {
+                MessageBox.Show("Пользователь с таким логином уже существует.", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (Core.Context.Users.Any(u => u.Email == email))
+            {
+                MessageBox.Show("Пользователь с таким email уже существует.", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var newUser = new Users
+            {
+                Login = login,
+                Password = password,
+                DisplayName = displayName,
+                Email = email,
+                RoleId = 1,
+                IsFrozen = false
+            };
+
+            Core.Context.Users.Add(newUser);
+            Core.Context.SaveChanges();
+
+            MessageBox.Show("Регистрация прошла успешно! Теперь войдите.", "Успех",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+
+            NavigationService?.Navigate(new LoginPage());
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new LoginPage());
+        }
     }
 }
+    
