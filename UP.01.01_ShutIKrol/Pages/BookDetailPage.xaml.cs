@@ -41,7 +41,21 @@ namespace UP._01._01_ShutIKrol.Pages
         
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new WindowReadText());
+            // Проверяем, есть ли у книги текст (замените .Content на ваше имя поля в БД)
+            if (!string.IsNullOrEmpty(_book.Content))
+            {
+                // Передаем текст в конструктор окна
+                WindowReadText window = new WindowReadText(_book.Content);
+
+                // Делаем основное окно владельцем, чтобы новое окно не "терялось" сзади
+                window.Owner = Window.GetWindow(this);
+
+                window.Show();
+            }
+            else
+            {
+                MessageBox.Show("У этой книги еще нет текста для чтения.");
+            }
         }
         private void BtnAddToList_Click(object sender, RoutedEventArgs e)
         {
@@ -93,6 +107,11 @@ namespace UP._01._01_ShutIKrol.Pages
                 Core.Context.SaveChanges();
                 MessageBox.Show("Книга заморожена.");
             }
+        }
+
+        private void BtnBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.GoBack();
         }
     }
 }

@@ -5,14 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UP._01._01_ShutIKrol.Pages"
         mc:Ignorable="d"
-        Title="WindowReadText" Height="450" Width="800">
-    <Grid>
+        Title="WindowReadText" 
+        Height="450" 
+        Width="800">
+    
+    <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" Content="Назад" Height="30" Width="70" HorizontalAlignment="Left"/>
-        <TextBlock Grid.Row="0" Text="Чтение текста" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Button x:Name="BtnBack" Content="Назад" HorizontalAlignment="Left" VerticalAlignment="Center" Width="80" Height="30" Click="ButtonBack_Click"/>
+            <TextBlock Text="Чтение текста" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#F9F9F9">
+            <TextBlock Text="{Binding Content}" TextWrapping="Wrap" FontSize="16" Padding="20" LineHeight="24" Foreground="#333333"/>
+        </ScrollViewer>
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace UP._01._01_ShutIKrol.Pages
 {
@@ -19,9 +20,16 @@ namespace UP._01._01_ShutIKrol.Pages
     /// </summary>
     public partial class WindowReadText : Window
     {
-        public WindowReadText()
+        public WindowReadText(string text)
         {
             InitializeComponent();
+            this.DataContext = new { Content = text };
+
+        }
+
+        private void ButtonBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

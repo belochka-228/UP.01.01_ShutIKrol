@@ -12,7 +12,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20">
             <StackPanel Orientation="Horizontal">
-                <Image Source="{Binding CoverPath}" Width="200" Height="280"
+                <Image Source="{Binding CoverPath}" Width="250" Height="300"
                        Stretch="UniformToFill" Margin="0,0,15,0"/>
                 <StackPanel>
                     <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="Bold" Margin="0,0,0,5"/>
@@ -79,6 +79,8 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <Button x:Name="Btn_Back" Content="Назад" Width="60" Height="25" HorizontalAlignment="Right" Click="BtnBack_Click"/>
         </StackPanel>
     </ScrollViewer>
 </Page>
