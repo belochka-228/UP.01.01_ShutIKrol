@@ -49,25 +49,17 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             ContentFrame.Navigate(new ReadingListsPage());
         }
-
         private void BtnAdmin_Click(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new AdminPage());
         }
-
         private void BtnAuthor_Click(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new AuthorPage());
         }
-
         private void BtnProfile_Click(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(new ProfilePage());
-        }
-
-        private void OnClick5( object sender, RoutedEventArgs e)
-        {
-
         }
         private void BtnFrozen_Click(object sender, RoutedEventArgs e)
         {

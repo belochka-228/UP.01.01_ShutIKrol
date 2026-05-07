@@ -38,11 +38,11 @@ namespace UP._01._01_ShutIKrol.Pages
                 .ToList();
             ReviewsList.ItemsSource = reviews;
         }
-
+        
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
+            NavigationService?.Navigate(new WindowReadText());
         }
-
         private void BtnAddToList_Click(object sender, RoutedEventArgs e)
         {
             // Проверка: нет ли уже такой записи
