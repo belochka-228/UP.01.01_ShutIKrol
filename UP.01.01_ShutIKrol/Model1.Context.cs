@@ -37,7 +37,6 @@ namespace UP._01._01_ShutIKrol
         public virtual DbSet<Reviews> Reviews { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<StatusBooks> StatusBooks { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<UnfreezeApplications> UnfreezeApplications { get; set; }
         public virtual DbSet<Users> Users { get; set; }
     }

@@ -82,7 +82,7 @@ namespace UP._01._01_ShutIKrol.Pages
                 int reviewId = Convert.ToInt32(btn.Tag);
                 MessageBox.Show($"Жалоба на отзыв #{reviewId} (пока заглушка).");
             }
-        }s
+        }
         private void BtnFreezeBook_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show($"Заморозить книгу «{_book.Title}»?",

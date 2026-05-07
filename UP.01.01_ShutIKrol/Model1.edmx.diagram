@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5d853ae58d27444a848b5d5e8fb17e57" Name="Diagram1">
+      <Diagram DiagramId="60a29627dc6641988ecc166618ee28a3" Name="Diagram1">
         <EntityTypeShape EntityType="DB_UPModel.ApplicationStatuses" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_UPModel.AuthorApplications" Width="1.5" PointX="5.25" PointY="9" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_UPModel.BookGenres" Width="1.5" PointX="7.5" PointY="13" IsExpanded="true" />
@@ -17,7 +17,6 @@
         <EntityTypeShape EntityType="DB_UPModel.Reviews" Width="1.5" PointX="10.5" PointY="15.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_UPModel.Roles" Width="1.5" PointX="0.75" PointY="10.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_UPModel.StatusBooks" Width="1.5" PointX="8.25" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DB_UPModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_UPModel.UnfreezeApplications" Width="1.5" PointX="10.5" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DB_UPModel.Users" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
         <AssociationConnector Association="DB_UPModel.FK__AuthorApp__Statu__628FA481" ManuallyRouted="false" />

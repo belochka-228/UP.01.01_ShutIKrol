@@ -17,9 +17,18 @@
         <Border Grid.Column="0" Background="#FFF0F0F0">
             <StackPanel VerticalAlignment="Top" Margin="0,10,0,0">
 
-                <Button ToolTip="Каталог книг" Click="BtnCatalog_Click" Style="{StaticResource SidebarButton}">
-                    📚
+                <Button ToolTip="Каталог книг" Width="50" Height="30" Click="BtnCatalog_Click" Style="{StaticResource ImageButtonStyle}">
+                    <Image Source="/Images/catalog.png"></Image>
                 </Button>
+
+                <Button ToolTip="Мои списки" Width="50" Height="30" Click="BtnLists_Click">
+                    <Image Source="/Images/spiski.png"></Image>
+                </Button>
+
+                <Button ToolTip="Каталог книг" Width="50" Height="30" Click="OnClick5">
+                    <Image Source="/Images/catalog.png"></Image>
+                </Button>
+
 
                 <Button ToolTip="Мои списки" Click="BtnLists_Click" Style="{StaticResource SidebarButton}">
                     📋
