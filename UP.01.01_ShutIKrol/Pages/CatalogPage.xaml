@@ -8,34 +8,24 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CatalogPage">
 
-    <Grid Margin="15">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Background="#FFF5F5F5" CornerRadius="8" Padding="10" Margin="0,0,0,10">
-            <StackPanel>
-                <DockPanel>
-                    <TextBlock Text="🔍" FontSize="18" VerticalAlignment="Center"/>
-                    <TextBox x:Name="TxtSearch" Width="250" Height="28" Margin="5,0"
-                             TextChanged="TxtSearch_TextChanged"
-                             ToolTip="Поиск по названию или автору"/>
-                </DockPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                    <TextBlock Text="Сортировка:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                    <ComboBox x:Name="CmbSort" Width="160" Height="28"
-                              SelectedIndex="0" SelectionChanged="CmbSort_SelectionChanged">
-                        <ComboBoxItem>Без сортировки</ComboBoxItem>
-                        <ComboBoxItem>По названию (А-Я)</ComboBoxItem>
-                        <ComboBoxItem>По рейтингу (убыв.)</ComboBoxItem>
-                    </ComboBox>
-                    <TextBlock Text="Жанр:" VerticalAlignment="Center" Margin="15,0,5,0"/>
-                    <ComboBox x:Name="CmbGenres" Width="160" Height="28"
-                              SelectionChanged="CmbGenres_SelectionChanged"/>
-                </StackPanel>
-            </StackPanel>
-        </Border>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+            <TextBlock Text="🔍" FontSize="18" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <TextBox x:Name="TxtSearch" Width="180" Height="26"
+                     TextChanged="TxtSearch_TextChanged"/>
+            <TextBlock Text="Сорт." VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
+            <!-- Заменили ComboBox на ContentControl для программного создания -->
+            <ContentControl x:Name="SortPlaceholder" Width="150" Height="26"
+                            VerticalAlignment="Center" Margin="0,0,0,0"/>
+            <TextBlock Text="Жанр" VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
+            <ContentControl x:Name="GenrePlaceholder" Width="150" Height="26"
+                            VerticalAlignment="Center" Margin="0,0,0,0"/>
+        </StackPanel>
 
         <ListBox Grid.Row="1" x:Name="ListBoxBooks"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -47,21 +37,20 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border Width="160" Margin="8" Background="White"
-                            CornerRadius="10" Padding="8"
-                            Cursor="Hand" ToolTip="Двойной клик — открыть книгу">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="10" Color="#20000000" ShadowDepth="2"/>
-                        </Border.Effect>
+                    <Border Width="170" Margin="8" Background="White"
+                            BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8"
+                            Padding="8" Cursor="Hand">
                         <StackPanel>
-                            <Image Source="{Binding CoverPath}"
-                                   Width="140" Height="180"
-                                   Stretch="UniformToFill"
-                                   HorizontalAlignment="Center"/>
+                            <Image Source="{Binding CoverPath}" Width="150" Height="190"
+                                   Stretch="UniformToFill"/>
                             <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="13"
-                                       TextTrimming="CharacterEllipsis" Margin="0,6,0,2"/>
+                                       Margin="0,6,0,2"/>
                             <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор: {0}'}"
-                                       FontSize="11" Foreground="Gray"/>
+                                       FontSize="11" Foreground="Gray" Margin="0,0,0,4"/>
+                            <Button Content="Добавить в список" Width="130" Height="28"
+                                    Background="#FFDDDDDD" BorderThickness="1"
+                                    BorderBrush="#AAAAAA" FontSize="12"
+                                    Click="BtnAddToList_Click"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>

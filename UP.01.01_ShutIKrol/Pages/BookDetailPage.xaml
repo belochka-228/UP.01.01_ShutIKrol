@@ -8,16 +8,27 @@
       d:DesignHeight="450" 
       d:DesignWidth="800"
       Title="BookDetailPage">
-    
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20">
             <StackPanel Orientation="Horizontal">
-                <Image Source="{Binding CoverPath}" Width="250" Height="300"
+                <Image Source="{Binding CoverPath}" Width="300" Height="350"
                        Stretch="UniformToFill" Margin="0,0,15,0"/>
                 <StackPanel>
-                    <TextBlock Text="{Binding Title}" FontSize="28" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор: {0}'}" 
-                               FontSize="16" Foreground="Gray" Margin="0,0,0,10"/>
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Title}" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
+                        
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"  Margin="20,0,0,0">
+                            <Button Content="Пожаловаться на книгу" Background="Transparent" Foreground="Red" Cursor="Hand" Click="BtnComplaintBook_Click" Margin="0,0,10,0"/>
+                            <Button Content="Пожаловаться на автора" Background="Transparent" Foreground="Red" Cursor="Hand" Click="BtnComplaintAuthor_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор: {0}'}" FontSize="16" Foreground="Black" Margin="0,0,0,10"/>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="★" FontSize="20" Foreground="#FFD700"/>
                         <TextBlock Text="{Binding AvgRating, StringFormat='0.0'}" FontSize="18" Margin="5,0,0,0"/>
@@ -26,52 +37,35 @@
                     <ItemsControl ItemsSource="{Binding BookGenres}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Genres.Name}" FontStyle="Italic" Foreground="#555"/>
+                                <TextBlock Text="{Binding Genres.Name}" Foreground="Black"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                     <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
-                        <Button Content="Читать" Width="120" Height="35"
-                                Background="#4CAF50" Foreground="White"
-                                Click="BtnRead_Click" Margin="0,0,10,0"/>
-                        <Button Content="Добавить в список" Width="120" Height="35"
-                                Background="#2196F3" Foreground="White"
-                                Click="BtnAddToList_Click"/>
+                        <Button Content="Читать" Width="120" Height="35" Background="#4CAF50" Foreground="White" Click="BtnRead_Click" Margin="0,0,10,0"/>
+                       
+                        <Button Content="Добавить в список" Width="120" Height="35" Background="#2196F3" Foreground="White" Click="BtnAddToList_Click"/>
+
+                        <Button x:Name="BtnFreezeBook" Content="Заморозить книгу" Width="120" Height="35" Background="#BDBDBD" Foreground="Black" Margin="10,0,0,0" Click="BtnFreezeBook_Click" Visibility="Visible"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                        <Button Content="Пожаловаться на книгу" 
-                                Background="Transparent" Foreground="#2196F3"
-                                Cursor="Hand" Click="BtnComplaintBook_Click"/>
-                        <Button Content="Пожаловаться на автора" 
-                                Background="Transparent" Foreground="#2196F3"
-                                Cursor="Hand" Click="BtnComplaintAuthor_Click" Margin="10,0,0,0"/>
-                    </StackPanel>
-                    <Button x:Name="BtnFreezeBook" Content="Заморозить книгу"
-                            Background="#FF5722" Foreground="White"
-                            Width="180" Height="30" Margin="0,10,0,0"
-                            Click="BtnFreezeBook_Click" Visibility="Collapsed"/>
                 </StackPanel>
             </StackPanel>
 
-            <TextBlock Text="{Binding Description}" FontSize="14" TextWrapping="Wrap" Margin="0,15,0,15"/>
+            <TextBlock Text="{Binding Description}" FontSize="16" TextWrapping="Wrap" Margin="0,10,0,15"/>
 
-            <TextBlock Text="Отзывы" FontSize="20" FontWeight="Bold" Margin="0,20,0,10"/>
+            <TextBlock Text="Отзывы" FontSize="20" FontWeight="Bold" Margin="0,15,0,15"/>
             <ItemsControl x:Name="ReviewsList">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" 
-                                Padding="10" Margin="0,0,0,8">
+                        <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,8">
                             <StackPanel>
                                 <TextBlock Text="{Binding Users.DisplayName}" FontWeight="Bold"/>
-                                <TextBlock Text="{Binding CreatedAt, StringFormat='dd.MM.yyyy'}" 
-                                           FontSize="12" Foreground="Gray"/>
+                                <TextBlock Text="{Binding CreatedAt, StringFormat='dd.MM.yyyy'}" FontSize="12" Foreground="Gray"/>
+                                
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Rating, StringFormat='★{0}'}" 
-                                               FontWeight="Bold" Foreground="#FFD700" VerticalAlignment="Center"/>
-                                    <Button Content="Жалоба" 
-                                            Background="Transparent" Foreground="#2196F3"
-                                            Cursor="Hand" Click="BtnComplaintReview_Click" 
-                                            Tag="{Binding Id}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Rating, StringFormat='★{0}'}" FontWeight="Bold" Foreground="#FFD700" VerticalAlignment="Center" Margin="0,0,0,10"/>
+                                   
+                                    <Button Content="Жалоба" Background="Transparent" Foreground="#2196F3" Cursor="Hand" Click="BtnComplaintReview_Click" Tag="{Binding Id}" VerticalAlignment="Center"/>
                                 </StackPanel>
                                 <TextBlock Text="{Binding Text}" Margin="0,5,0,0" TextWrapping="Wrap"/>
                             </StackPanel>

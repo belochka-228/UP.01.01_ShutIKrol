@@ -19,14 +19,17 @@ namespace UP._01._01_ShutIKrol.Pages
     public partial class BookDetailPage : Page
     {
         private Books _book;
+        private List<ComplaintTargetTypes> _complaintTargetTypes;
+        private List<Reviews> _reviews;
+
         public BookDetailPage(Books book)
         {
             InitializeComponent();
             _book = book;
             DataContext = _book;
-            // Загрузка отзывов
+            _complaintTargetTypes = Core.Context.ComplaintTargetTypes.ToList();
             LoadReviews();
-            // Показать кнопку заморозки, если пользователь — администратор
+
             if (UserData.CurrentUser != null && UserData.CurrentUser.Roles?.RoleName == "Администратор")
             {
                 BtnFreezeBook.Visibility = Visibility.Visible;
@@ -34,22 +37,15 @@ namespace UP._01._01_ShutIKrol.Pages
         }
         private void LoadReviews()
         {
-            var reviews = Core.Context.Reviews.Where(r => r.BookId == _book.Id).Include("Users")  // подгружаем автора отзыва
-                .ToList();
-            ReviewsList.ItemsSource = reviews;
+            _reviews = Core.Context.Reviews.Where(r => r.BookId == _book.Id).Include("Users").ToList();
+            ReviewsList.ItemsSource = _reviews;
         }
-        
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
-            // Проверяем, есть ли у книги текст (замените .Content на ваше имя поля в БД)
             if (!string.IsNullOrEmpty(_book.Content))
             {
-                // Передаем текст в конструктор окна
                 WindowReadText window = new WindowReadText(_book.Content);
-
-                // Делаем основное окно владельцем, чтобы новое окно не "терялось" сзади
                 window.Owner = Window.GetWindow(this);
-
                 window.Show();
             }
             else
@@ -59,42 +55,31 @@ namespace UP._01._01_ShutIKrol.Pages
         }
         private void BtnAddToList_Click(object sender, RoutedEventArgs e)
         {
-            // Проверка: нет ли уже такой записи
-            bool exists = Core.Context.ReadingLists.Any(r => r.UserId == UserData.CurrentUser.Id && r.BookId == _book.Id);
-            if (exists)
-            {
-                MessageBox.Show("Книга уже в вашем списке.");
-                return;
-            }
-            // Добавляем со статусом "В планах" (Id=2)
-            var newItem = new ReadingLists
-            {
-                UserId = UserData.CurrentUser.Id,
-                BookId = _book.Id,
-                StatusId = 2,
-                UpdatedAt = DateTime.Now
-            };
-            Core.Context.ReadingLists.Add(newItem);
-            Core.Context.SaveChanges();
-            MessageBox.Show("Книга добавлена в список «В планах».");
+            var window = new WindowAddToList(_book);
+            window.Owner = Window.GetWindow(this);
+            window.ShowDialog();
+            NavigationService?.Navigate(new CatalogPage());
         }
-
         private void BtnComplaintBook_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Жалоба на книгу (пока заглушка).");
+            var window = new ComplaintWindow(1, _book.Title, _book.Id);
+            window.Owner = Window.GetWindow(this);
+            window.ShowDialog();
         }
-
         private void BtnComplaintAuthor_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Жалоба на автора (пока заглушка).");
+            var window = new ComplaintWindow(3, _book.Users?.DisplayName ?? "Автор", _book.Id);
+            window.Owner = Window.GetWindow(this);
+            window.ShowDialog();
         }
-
         private void BtnComplaintReview_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag != null)
             {
                 int reviewId = Convert.ToInt32(btn.Tag);
-                MessageBox.Show($"Жалоба на отзыв #{reviewId} (пока заглушка).");
+                var window = new ComplaintWindow(2, $"Отзыв #{reviewId}", _book.Id);
+                window.Owner = Window.GetWindow(this);
+                window.ShowDialog();
             }
         }
         private void BtnFreezeBook_Click(object sender, RoutedEventArgs e)
@@ -108,10 +93,9 @@ namespace UP._01._01_ShutIKrol.Pages
                 MessageBox.Show("Книга заморожена.");
             }
         }
-
         private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.GoBack();
+            NavigationService?.GoBack();
         }
     }
 }

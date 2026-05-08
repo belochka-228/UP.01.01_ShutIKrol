@@ -20,7 +20,7 @@
             <TextBlock Text="Чтение текста" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#F9F9F9">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#e6e0e0">
             <TextBlock Text="{Binding Content}" TextWrapping="Wrap" FontSize="16" Padding="20" LineHeight="24" Foreground="#333333"/>
         </ScrollViewer>
     </Grid>

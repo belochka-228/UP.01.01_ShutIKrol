@@ -19,95 +19,82 @@ namespace UP._01._01_ShutIKrol.Pages
     public partial class CatalogPage : Page
     {
         private List<Books> _allBooks;
-        private List<Genres> _genres;
-        private ListBox BookListBox => this.FindName("ListBoxBooks") as ListBox;
-
+        private ComboBox _cmbSort;
+        private ComboBox _cmbGenres;
         public CatalogPage()
         {
             InitializeComponent();
-            Loaded += CatalogPage_Loaded;
-        }
-        private void CatalogPage_Loaded(object sender, RoutedEventArgs e)
-        {
             LoadData();
         }
         private void LoadData()
         {
-            _allBooks = Core.Context.Books.Include("Users").Where(b => !b.IsFrozen).ToList();
+            _allBooks = Core.Context.Books.Where(b => !b.IsFrozen).ToList();
+            ListBoxBooks.ItemsSource = _allBooks;
 
-            _genres = Core.Context.Genres.ToList();
-            _genres.Insert(0, new Genres { Id = 0, Name = "Все жанры" });
+            _cmbSort = new ComboBox { Width = 150, Height = 26 };
+            _cmbSort.Items.Add(new ComboBoxItem { Content = "Без" });
+            _cmbSort.Items.Add(new ComboBoxItem { Content = "По названию" });
+            _cmbSort.Items.Add(new ComboBoxItem { Content = "По рейтингу" });
+            _cmbSort.SelectedIndex = 0;
+            _cmbSort.SelectionChanged += CmbSort_SelectionChanged;
+            SortPlaceholder.Content = _cmbSort;
 
-            CmbGenres.ItemsSource = _genres;
-            CmbGenres.DisplayMemberPath = "Name";
-            CmbGenres.SelectedValuePath = "Id";
-            CmbGenres.SelectedIndex = 0;
-
-            UpdateBookList(_allBooks);
-        }
-        private void UpdateBookList(List<Books> books)
-        {
-            if (BookListBox != null)
-                BookListBox.ItemsSource = books;
-        }
-        private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string searchText = TxtSearch.Text.Trim().ToLower();
-            if (string.IsNullOrEmpty(searchText))
+            _cmbGenres = new ComboBox
             {
-                UpdateBookList(_allBooks);
-                return;
-            }
-            var filtered = _allBooks.Where(b => b.Title.ToLower().Contains(searchText)
-                         || (b.Users != null && b.Users.DisplayName.ToLower().Contains(searchText))).ToList();
-            UpdateBookList(filtered);
+                Width = 150,
+                Height = 26,
+                DisplayMemberPath = "Name"
+            };
+            _cmbGenres.ItemsSource = Core.Context.Genres.ToList();
+            _cmbGenres.SelectedIndex = 0;
+            _cmbGenres.SelectionChanged += CmbGenres_SelectionChanged;
+            GenrePlaceholder.Content = _cmbGenres;
         }
-        private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CmbSort.SelectedItem == null) return;
-            string sortType = ((ComboBoxItem)CmbSort.SelectedItem).Content.ToString();
+        private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e) => ApplyFilters();
+        private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e) => ApplyFilters();
+        private void CmbGenres_SelectionChanged(object sender, SelectionChangedEventArgs e) => ApplyFilters();
 
-            List<Books> sortedList;
-            switch (sortType)
+        private void ApplyFilters()
+        {
+            if (_allBooks == null) return;
+            var filtered = _allBooks.AsEnumerable();
+
+            string text = TxtSearch.Text.ToLower();
+            if (!string.IsNullOrWhiteSpace(text))
+                filtered = filtered.Where(b => b.Title.ToLower().Contains(text) || b.Users.DisplayName.ToLower().Contains(text));
+
+            if (_cmbGenres?.SelectedItem is Genres genre && genre.Id != 0)
+                filtered = filtered.Where(b => b.BookGenres.Any(bg => bg.GenreId == genre.Id));
+
+            switch (_cmbSort?.SelectedIndex)
             {
-                case "По названию (А-Я)":
-                    sortedList = _allBooks.OrderBy(b => b.Title).ToList();
+                case 1:
+                    filtered = filtered.OrderBy(b => b.Title);
                     break;
-                case "По рейтингу (убыв.)":
-                    sortedList = _allBooks.OrderByDescending(b =>
-                        b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0).ToList();
-                    break;
-                default:
-                    sortedList = _allBooks;
+                case 2:
+                    filtered = filtered.OrderByDescending(b => b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0);
                     break;
             }
-            if (!string.IsNullOrWhiteSpace(TxtSearch.Text))
-            {
-                string searchText = TxtSearch.Text.Trim().ToLower();
-                sortedList = sortedList.Where(b => b.Title.ToLower().Contains(searchText)
-                             || (b.Users != null && b.Users.DisplayName.ToLower().Contains(searchText))).ToList();
-            }
-            UpdateBookList(sortedList);
-        }
-        private void CmbGenres_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (CmbGenres.SelectedItem == null) return;
-            var selectedGenre = CmbGenres.SelectedItem as Genres;
-            if (selectedGenre == null || selectedGenre.Id == 0)
-            {
-                UpdateBookList(_allBooks);
-                return;
-            }
-            var filtered = _allBooks.Where(b => b.BookGenres.Any(bg => bg.GenreId == selectedGenre.Id)).ToList();
-            UpdateBookList(filtered);
+            ListBoxBooks.ItemsSource = filtered.ToList();
         }
         private void ListBoxBooks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (BookListBox?.SelectedItem is Books selectedBook)
+            if (ListBoxBooks.SelectedItem is Books selectedBook)
             {
                 var mainWindow = Application.Current.MainWindow as MainWindow;
                 mainWindow?.MainFrame.Navigate(new BookDetailPage(selectedBook));
             }
         }
+
+        private void BtnAddToList_Click(object sender, RoutedEventArgs e)
+        {
+            if (((Button)sender).DataContext is Books selectedBook)
+            {
+                var window = new WindowAddToList(selectedBook);
+                window.Owner = Window.GetWindow(this);
+                window.ShowDialog();
+            }
+        }
     }
 }
+
