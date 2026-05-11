@@ -124,8 +124,14 @@
     <Compile Include="Pages\ComplaintWindow.xaml.cs">
       <DependentUpon>ComplaintWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\EditWindow.xaml.cs">
+      <DependentUpon>EditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MoveBookWindow.xaml.cs">
+      <DependentUpon>MoveBookWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ProfilePage.xaml.cs">
       <DependentUpon>ProfilePage.xaml</DependentUpon>
@@ -138,6 +144,9 @@
     </Compile>
     <Compile Include="Pages\WindowReadText.xaml.cs">
       <DependentUpon>WindowReadText.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\﻿AddBookPage.xaml.cs">
+      <DependentUpon>﻿AddBookPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReadingLists.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -194,11 +203,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\EditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MoveBookWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -219,6 +236,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\WindowReadText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\﻿AddBookPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

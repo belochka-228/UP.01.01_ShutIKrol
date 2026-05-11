@@ -20,6 +20,7 @@ namespace UP._01._01_ShutIKrol
         public int StatusId { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public Nullable<int> BookId { get; set; }
+        public Nullable<bool> IsConfirmed { get; set; }
     
         public virtual ApplicationStatuses ApplicationStatuses { get; set; }
         public virtual Books Books { get; set; }

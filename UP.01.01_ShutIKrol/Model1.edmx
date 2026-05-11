@@ -59,6 +59,7 @@
           <Property Name="ReasonId" Type="int" Nullable="false" />
           <Property Name="BookId" Type="int" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="IsConfirmed" Type="bit" />
         </EntityType>
         <EntityType Name="ComplaintTargetTypes">
           <Key>
@@ -130,6 +131,7 @@
           <Property Name="StatusId" Type="int" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="BookId" Type="int" />
+          <Property Name="IsConfirmed" Type="bit" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -520,6 +522,7 @@
           <Property Name="ReasonId" Type="Int32" Nullable="false" />
           <Property Name="BookId" Type="Int32" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsConfirmed" Type="Boolean" />
           <NavigationProperty Name="Books" Relationship="Self.FK_Complaints_Books" FromRole="Complaints" ToRole="Books" />
           <NavigationProperty Name="ComplaintReasons" Relationship="Self.FK__Complaint__Reaso__6754599E" FromRole="Complaints" ToRole="ComplaintReasons" />
           <NavigationProperty Name="ComplaintTargetTypes" Relationship="Self.FK__Complaint__Targe__68487DD7" FromRole="Complaints" ToRole="ComplaintTargetTypes" />
@@ -604,6 +607,7 @@
           <Property Name="StatusId" Type="Int32" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="BookId" Type="Int32" />
+          <Property Name="IsConfirmed" Type="Boolean" />
           <NavigationProperty Name="ApplicationStatuses" Relationship="Self.FK__UnfreezeA__Statu__6FE99F9F" FromRole="UnfreezeApplications" ToRole="ApplicationStatuses" />
           <NavigationProperty Name="Books" Relationship="Self.FK_UnfreezeApplications_Books" FromRole="UnfreezeApplications" ToRole="Books" />
           <NavigationProperty Name="Users" Relationship="Self.FK__UnfreezeA__UserI__70DDC3D8" FromRole="UnfreezeApplications" ToRole="Users" />
@@ -996,6 +1000,7 @@
                 <ScalarProperty Name="ReasonId" ColumnName="ReasonId" />
                 <ScalarProperty Name="BookId" ColumnName="BookId" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1075,6 +1080,7 @@
                 <ScalarProperty Name="StatusId" ColumnName="StatusId" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -44,7 +44,6 @@ namespace UP._01._01_ShutIKrol.Pages
 
             TxtTargetInfo.Text = $"Жалоба на {typeText}";
             TxtTargetName.Text = targetName;
-
             _reasons = Core.Context.ComplaintReasons.ToList();
             CmbReasons.ItemsSource = _reasons;
             CmbReasons.SelectedIndex = 0;
@@ -80,13 +79,13 @@ namespace UP._01._01_ShutIKrol.Pages
                 Core.Context.Complaints.Add(complaint);
                 Core.Context.SaveChanges();
 
-                MessageBox.Show("Жалоба отправлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Жалоба отправлена.");
                 this.DialogResult = true;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Ошибка: {ex.Message}");
             }
         }
     }

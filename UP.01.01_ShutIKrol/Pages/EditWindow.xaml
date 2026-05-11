@@ -1,0 +1,67 @@
+﻿<Window x:Class="UP._01._01_ShutIKrol.Pages.EditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UP._01._01_ShutIKrol.Pages"
+        mc:Ignorable="d"
+        Title="EditWindow" Height="450" Width="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Левая колонка с обложкой -->
+        <StackPanel Margin="10">
+            <Image Source="{Binding CoverPath}" Width="300" Height="370" Stretch="UniformToFill"/>
+            <TextBox x:Name="TxtBoxCoverPath" Text="{Binding CoverPath}" Margin="0 10 0 10" Width="270"/>
+        </StackPanel>
+
+        <!-- Правая колонка -->
+        <StackPanel Grid.Column="1" Margin="5">
+            <TextBlock Text="Название: "/>
+            <TextBox x:Name="TxtBoxTitle" Text="{Binding Title}" Margin="0 0 0 15" />
+
+            <!-- Добавление нового жанра -->
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                <TextBlock Text="Добавить жанр:" VerticalAlignment="Center" Margin="0 0 5 0"/>
+                <ComboBox x:Name="CmbGenre" Width="150" Height="26" DisplayMemberPath="Name"/>
+                <Button x:Name="BtnAddGenre" Content="Добавить" Width="80" Height="26" Margin="5 0 0 0"
+                        Background="#FFDDDDDD" BorderThickness="1" BorderBrush="#AAAAAA"
+                        Click="BtnAddGenre_Click"/>
+            </StackPanel>
+
+            <!-- Список текущих жанров -->
+            <TextBlock Text="Текущие жанры:" Margin="0 0 5 0"/>
+            <ListBox x:Name="ListBoxGenres" Height="100">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Genres.Name}"/>
+                            <Button x:Name="BtnDeleteGenre" Grid.Column="1" Content="✕"
+                                    Background="Transparent" BorderThickness="0" FontSize="10"
+                                    Click="BtnDeleteGenre_Click"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TextBlock Text="Описание: " Margin="0 10 0 0"/>
+            <TextBox x:Name="TxtBoxDescription" Text="{Binding Description}" Margin="0 5 0 15"
+                     Width="250" Height="100" TextWrapping="Wrap"/>
+
+            <TextBlock Text="Текст: "/>
+            <TextBox x:Name="TxtBoxContent" Text="{Binding Content}" Margin="0 5 0 15"
+                     Width="250" Height="180" TextWrapping="Wrap"/>
+
+            <Button x:Name="BtnSave" Content="Сохранить" Background="#4CAF50" Foreground="White"
+                    BorderThickness="0" Width="150" HorizontalAlignment="Left" Click="BtnSave_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

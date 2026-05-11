@@ -63,8 +63,7 @@ namespace UP._01._01_ShutIKrol.Pages
         }
         private void BtnFrozen_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Ваш аккаунт заморожен. Вы можете оспорить заморозку в профиле.",
-                            "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show("Ваш аккаунт заморожен. Вы можете оспорить заморозку в профиле.");
         }
     }
 }

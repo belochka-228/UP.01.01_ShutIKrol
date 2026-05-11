@@ -25,8 +25,13 @@ namespace UP._01._01_ShutIKrol.Pages
         public BookDetailPage(Books book)
         {
             InitializeComponent();
+
             _book = book;
             DataContext = _book;
+
+            double avgRating = _book.Reviews.Any() ? _book.Reviews.Average(r => r.Rating) : 0;
+            TxtRating.Text = avgRating.ToString("0");
+
             _complaintTargetTypes = Core.Context.ComplaintTargetTypes.ToList();
             LoadReviews();
 

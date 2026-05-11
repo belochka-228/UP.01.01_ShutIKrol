@@ -39,13 +39,16 @@ namespace UP._01._01_ShutIKrol.Pages
             _cmbSort.SelectionChanged += CmbSort_SelectionChanged;
             SortPlaceholder.Content = _cmbSort;
 
+            var genres = Core.Context.Genres.ToList();
+            genres.Insert(0, new Genres { Id = 0, Name = "Все жанры" });
+
             _cmbGenres = new ComboBox
             {
                 Width = 150,
                 Height = 26,
                 DisplayMemberPath = "Name"
             };
-            _cmbGenres.ItemsSource = Core.Context.Genres.ToList();
+            _cmbGenres.ItemsSource = genres;
             _cmbGenres.SelectedIndex = 0;
             _cmbGenres.SelectionChanged += CmbGenres_SelectionChanged;
             GenrePlaceholder.Content = _cmbGenres;
@@ -85,7 +88,6 @@ namespace UP._01._01_ShutIKrol.Pages
                 mainWindow?.MainFrame.Navigate(new BookDetailPage(selectedBook));
             }
         }
-
         private void BtnAddToList_Click(object sender, RoutedEventArgs e)
         {
             if (((Button)sender).DataContext is Books selectedBook)

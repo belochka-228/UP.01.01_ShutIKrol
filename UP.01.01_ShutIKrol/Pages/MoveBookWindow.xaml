@@ -1,0 +1,21 @@
+﻿<Window x:Class="UP._01._01_ShutIKrol.Pages.MoveBookWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UP._01._01_ShutIKrol.Pages"
+        mc:Ignorable="d"
+        Title="MoveBookWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="15">
+        <StackPanel>
+            <TextBlock Text="Переместить книгу" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="{Binding Books.Title, StringFormat='Книга: {0}'}" Margin="0,0,0,5"/>
+            <TextBlock Text="Новый статус:" Margin="0,10,0,5"/>
+            <ComboBox x:Name="CmbStatuses" DisplayMemberPath="Name"/>
+            <Button Content="Переместить" Width="120" Height="30" Margin="0,20,0,0"
+                    Background="#2196F3" Foreground="White" BorderThickness="0"
+                    Click="BtnMove_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

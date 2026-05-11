@@ -31,7 +31,7 @@
                     <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор: {0}'}" FontSize="16" Foreground="Black" Margin="0,0,0,10"/>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="★" FontSize="20" Foreground="#FFD700"/>
-                        <TextBlock Text="{Binding AvgRating, StringFormat='0.0'}" FontSize="18" Margin="5,0,0,0"/>
+                        <TextBlock x:Name="TxtRating" FontSize="18" Margin="5,0,0,0"/>
                     </StackPanel>
                     <TextBlock Text="Жанры:" FontWeight="Bold" Margin="0,0,0,3"/>
                     <ItemsControl ItemsSource="{Binding BookGenres}">
