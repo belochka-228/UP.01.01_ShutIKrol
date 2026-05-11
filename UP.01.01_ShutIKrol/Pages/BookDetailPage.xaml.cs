@@ -39,11 +39,11 @@ namespace UP._01._01_ShutIKrol.Pages
             {
                 BtnFreezeBook.Visibility = Visibility.Visible;
             }
-        }
+        } 
         private void LoadReviews()
         {
-            _reviews = Core.Context.Reviews.Where(r => r.BookId == _book.Id).Include("Users").ToList();
-            ReviewsList.ItemsSource = _reviews;
+            var reviews = Core.Context.Reviews.Where(r => r.BookId == _book.Id && !r.IsFrozen).Include("Users").ToList();
+            ReviewsList.ItemsSource = reviews;
         }
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
@@ -71,12 +71,14 @@ namespace UP._01._01_ShutIKrol.Pages
             window.Owner = Window.GetWindow(this);
             window.ShowDialog();
         }
+
         private void BtnComplaintAuthor_Click(object sender, RoutedEventArgs e)
         {
             var window = new ComplaintWindow(3, _book.Users?.DisplayName ?? "Автор", _book.Id);
             window.Owner = Window.GetWindow(this);
             window.ShowDialog();
         }
+
         private void BtnComplaintReview_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag != null)
@@ -96,6 +98,40 @@ namespace UP._01._01_ShutIKrol.Pages
                 _book.IsFrozen = true;
                 Core.Context.SaveChanges();
                 MessageBox.Show("Книга заморожена.");
+            }
+        }
+        private void BtnFreezeReview_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (UserData.CurrentUser?.Roles?.RoleName == "Администратор")
+                ((Button)sender).Visibility = Visibility.Visible;
+        }
+
+        private void BtnFreezeReview_Click(object sender, RoutedEventArgs e)
+        {
+            if (UserData.CurrentUser?.Roles?.RoleName != "Администратор")
+            {
+                MessageBox.Show("Недостаточно прав.");
+                return;
+            }
+
+            Button btn = (Button)sender;
+            int reviewId = (int)btn.Tag;
+            var review = Core.Context.Reviews.FirstOrDefault(r => r.Id == reviewId);
+            if (review == null) return;
+
+            if (review.IsFrozen)
+            {
+                MessageBox.Show("Этот отзыв уже заморожен.");
+                return;
+            }
+
+            MessageBoxResult result = MessageBox.Show("Заморозить этот отзыв?",
+                "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                review.IsFrozen = true;
+                Core.Context.SaveChanges();
+                LoadReviews(); // обновить список
             }
         }
         private void BtnBack_Click(object sender, RoutedEventArgs e)

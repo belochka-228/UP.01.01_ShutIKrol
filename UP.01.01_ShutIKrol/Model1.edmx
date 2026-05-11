@@ -96,6 +96,7 @@
           <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Rating" Type="int" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="IsFrozen" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -568,6 +569,7 @@
           <Property Name="Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Rating" Type="Int32" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsFrozen" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Books" Relationship="Self.FK__Reviews__BookId__6E01572D" FromRole="Reviews" ToRole="Books" />
           <NavigationProperty Name="Users" Relationship="Self.FK__Reviews__UserId__6EF57B66" FromRole="Reviews" ToRole="Users" />
         </EntityType>
@@ -1041,6 +1043,7 @@
                 <ScalarProperty Name="Text" ColumnName="Text" />
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="IsFrozen" ColumnName="IsFrozen" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

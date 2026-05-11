@@ -26,24 +26,21 @@ namespace UP._01._01_ShutIKrol.Pages
             InitializeComponent();
             Loaded += ProfilePage_Loaded;
         }
-
         private void ProfilePage_Loaded(object sender, RoutedEventArgs e)
         {
             var user = UserData.CurrentUser;
+            if (user.Roles?.RoleName == "Читатель")
+                BtnAuthorRequest.Visibility = Visibility.Visible;
+            else
+                BtnAuthorRequest.Visibility = Visibility.Collapsed;
             if (user == null)
             {
                 NavigationService?.GoBack();
                 return;
             }
-
-            // Проверка заморозки
             if (user.IsFrozen)
             {
-                MessageBoxResult result = MessageBox.Show(
-                    "Ваш аккаунт заморожен! Хотите подать заявку на разморозку?",
-                    "Заморожен",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
+                MessageBoxResult result = MessageBox.Show("Ваш аккаунт заморожен! Хотите подать заявку на разморозку?", "Заморожен", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
                     var request = new UnfreezeApplications
@@ -62,38 +59,25 @@ namespace UP._01._01_ShutIKrol.Pages
                 mainWindow?.MainFrame.Navigate(new MainPage());
                 return;
             }
-
-            // Отображаем данные пользователя
             DataContext = user;
 
-            // Загружаем отзывы пользователя с книгами
-            var reviews = Core.Context.Reviews
-                .Where(r => r.UserId == user.Id)
-                .Include("Books")
-                .OrderByDescending(r => r.CreatedAt)
-                .ToList();
+            var reviews = Core.Context.Reviews.Where(r => r.UserId == user.Id).Include("Books").OrderByDescending(r => r.CreatedAt).ToList();
             ListBoxReviews.ItemsSource = reviews;
         }
-
         private void BtnAuthorRequest_Click(object sender, RoutedEventArgs e)
         {
             var user = UserData.CurrentUser;
+
             if (user == null) return;
 
-            // Проверка, не подавал ли уже заявку
-            bool alreadyRequested = Core.Context.AuthorApplications
-                .Any(a => a.UserId == user.Id);
+            bool alreadyRequested = Core.Context.AuthorApplications.Any(a => a.UserId == user.Id);
             if (alreadyRequested)
             {
                 MessageBox.Show("Вы уже подавали заявку на роль автора.");
                 return;
             }
 
-            MessageBoxResult result = MessageBox.Show(
-                "Подать заявку на получение роли «Автор»?",
-                "Подтверждение",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+            MessageBoxResult result = MessageBox.Show("Подать заявку на получение роли «Автор»?","Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 try

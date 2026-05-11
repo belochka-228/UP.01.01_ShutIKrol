@@ -28,26 +28,18 @@ namespace UP._01._01_ShutIKrol.Pages
                 InitializeComponent();
                 LoadData();
             }
-
             private void LoadData()
             {
                 int currentUserId = UserData.CurrentUser.Id;
-
-                // Если аккаунт заморожен, блокируем добавление новых книг
                 if (UserData.CurrentUser.IsFrozen)
                 {
                     BtnAddNewBook.IsEnabled = false;
                     BtnAddNewBook.ToolTip = "Добавление книг недоступно (аккаунт заморожен)";
                 }
-
-                _activeBooks = Core.Context.Books
-                    .Where(b => b.AuthorId == currentUserId && !b.IsFrozen)
-                    .ToList();
+                _activeBooks = Core.Context.Books.Where(b => b.AuthorId == currentUserId && !b.IsFrozen).ToList();
                 ListBoxBooks.ItemsSource = _activeBooks;
 
-                _frozenBooks = Core.Context.Books
-                    .Where(b => b.AuthorId == currentUserId && b.IsFrozen)
-                    .ToList();
+                _frozenBooks = Core.Context.Books.Where(b => b.AuthorId == currentUserId && b.IsFrozen).ToList();
                 ListBoxFrozenBooks.ItemsSource = _frozenBooks;
             }
 
@@ -56,7 +48,7 @@ namespace UP._01._01_ShutIKrol.Pages
             NavigationService?.Navigate(new __AddBookPage());
             }
 
-        private void BtnEditBook_Click(object sender, RoutedEventArgs e)
+            private void BtnEditBook_Click(object sender, RoutedEventArgs e)
             {
                 var btn = (Button)sender;
                 if (btn.DataContext is Books selectedBook)
@@ -65,7 +57,7 @@ namespace UP._01._01_ShutIKrol.Pages
                     window.Owner = Window.GetWindow(this);
                     window.ShowDialog();
                 }
-        }
+            }
 
             private void BtnDefrozeBook_Click(object sender, RoutedEventArgs e)
             {

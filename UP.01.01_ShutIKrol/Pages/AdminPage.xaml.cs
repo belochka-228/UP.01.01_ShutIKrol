@@ -54,29 +54,50 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             ListBoxFrozenBooks.ItemsSource = Core.Context.Books.Where(b => b.IsFrozen).Include("Users").ToList();
             ListBoxFrozenUsers.ItemsSource = Core.Context.Users.Where(u => u.IsFrozen).Include("Roles").ToList();
+            ListBoxFrozenReviews.ItemsSource = Core.Context.Reviews.Where(r => r.IsFrozen).Include("Users").Include("Books").ToList();
         }
         private void LoadAllUsers()
         {
             var users = Core.Context.Users.Include("Roles").ToList();
             ListBoxAllUsers.ItemsSource = users;
         }
-        // ========== Жалобы ==========
         private void BtnAcceptComplaint_Click(object sender, RoutedEventArgs e)
         {
             var complaint = ((Button)sender).DataContext as Complaints;
             if (complaint == null) return;
+
             complaint.IsConfirmed = true;
             Core.Context.SaveChanges();
-            // Замораживаем книгу, если жалоба на книгу (TargetTypeId == 1)
-            if (complaint.TargetTypeId == 1)
+
+            switch (complaint.TargetTypeId)
             {
-                var book = Core.Context.Books.FirstOrDefault(b => b.Id == complaint.BookId);
-                if (book != null)
-                {
-                    book.IsFrozen = true;
-                    Core.Context.SaveChanges();
-                }
+                case 1: // Book — заморозка книги
+                    var book = Core.Context.Books.FirstOrDefault(b => b.Id == complaint.BookId);
+                    if (book != null)
+                    {
+                        book.IsFrozen = true;
+                        Core.Context.SaveChanges();
+                    }
+                    break;
+
+                case 3: // Author — заморозка автора книги
+                    var targetBook = Core.Context.Books.FirstOrDefault(b => b.Id == complaint.BookId);
+                    if (targetBook != null)
+                    {
+                        var author = Core.Context.Users.FirstOrDefault(u => u.Id == targetBook.AuthorId);
+                        if (author != null)
+                        {
+                            author.IsFrozen = true;
+                            Core.Context.SaveChanges();
+                        }
+                    }
+                    break;
+
+                case 2: // Review — просто подтверждаем, без заморозки
+                default:
+                    break;
             }
+
             LoadComplaints();
         }
         private void BtnRejectComplaint_Click(object sender, RoutedEventArgs e)
@@ -88,7 +109,6 @@ namespace UP._01._01_ShutIKrol.Pages
             Core.Context.SaveChanges();
             LoadComplaints();
         }
-        // ========== Заявки на разморозку ==========
         private void BtnAcceptUnfreeze_Click(object sender, RoutedEventArgs e)
         {
             var request = ((Button)sender).DataContext as UnfreezeApplications;
@@ -96,8 +116,7 @@ namespace UP._01._01_ShutIKrol.Pages
 
             request.IsConfirmed = true;
             Core.Context.SaveChanges();
-            // Снимаем заморозку с книги или пользователя
-            if (request.BookId != null)            // разморозка книги
+            if (request.BookId != null)
             {
                 var book = Core.Context.Books.FirstOrDefault(b => b.Id == request.BookId);
                 if (book != null)
@@ -106,7 +125,7 @@ namespace UP._01._01_ShutIKrol.Pages
                     Core.Context.SaveChanges();
                 }
             }
-            else                                   // разморозка пользователя
+            else
             {
                 var user = Core.Context.Users.FirstOrDefault(u => u.Id == request.UserId);
                 if (user != null)
@@ -126,19 +145,18 @@ namespace UP._01._01_ShutIKrol.Pages
             Core.Context.SaveChanges();
             LoadUnfreezeRequests();
         }
-        // ========== Заявки на автора ==========
         private void BtnAcceptAuthorApp_Click(object sender, RoutedEventArgs e)
         {
             var app = ((Button)sender).DataContext as AuthorApplications;
             if (app == null) return;
 
-            app.StatusId = 2;                     // Approved
+            app.StatusId = 2;
             Core.Context.SaveChanges();
 
             var user = Core.Context.Users.FirstOrDefault(u => u.Id == app.UserId);
             if (user != null)
             {
-                user.RoleId = 2;                  // Автор
+                user.RoleId = 2;
                 Core.Context.SaveChanges();
             }
             LoadAuthorRequests();
@@ -148,31 +166,25 @@ namespace UP._01._01_ShutIKrol.Pages
             var app = ((Button)sender).DataContext as AuthorApplications;
             if (app == null) return;
 
-            app.StatusId = 3;                     // Rejected
+            app.StatusId = 3;
             Core.Context.SaveChanges();
             LoadAuthorRequests();
         }
-        // ========== Смена роли пользователя ========
         private void CmbRole_Loaded(object sender, RoutedEventArgs e)
         {
             var comboBox = (ComboBox)sender;
-            // Заполняем роли только один раз
             if (comboBox.Items.Count == 0)
             {
                 comboBox.Items.Add("Читатель");
                 comboBox.Items.Add("Автор");
                 comboBox.Items.Add("Администратор");
             }
-
-            // Получаем текущего пользователя из DataContext
             var user = comboBox.DataContext as Users;
             if (user != null && user.Roles != null)
             {
                 comboBox.SelectedItem = user.Roles.RoleName;
             }
         }
-
-        // Обработчик смены роли остается как есть
         private void CmbRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var comboBox = (ComboBox)sender;
@@ -186,22 +198,34 @@ namespace UP._01._01_ShutIKrol.Pages
             {
                 user.RoleId = newRoleId;
                 Core.Context.SaveChanges();
-                // Обновляем отображаемую роль в TextBlock'е через обновление свойства
                 var main = Application.Current.MainWindow as MainWindow;
                 main?.MainFrame.Refresh();
-                LoadAllUsers();                           // перезагружаем весь список
+                LoadAllUsers();
             }
         }
-        // ========== Смена пароля ==========
         private void BtnChangePassword_Click(object sender, RoutedEventArgs e)
         {
-            var user = ((Button)sender).DataContext as Users;
+            var btn = (Button)sender;
+            var parentStack = (StackPanel)btn.Parent;
+            var txtBox = parentStack.Children[0] as TextBox;
+
+            if (txtBox == null) return;
+
+            var user = btn.DataContext as Users;
             if (user == null) return;
 
-            string newPassword = "newpass123";   // в реальности нужен диалог ввода
+            string newPassword = txtBox.Text.Trim();
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                MessageBox.Show("Введите новый пароль.");
+                return;
+            }
+
             user.Password = newPassword;
             Core.Context.SaveChanges();
-            MessageBox.Show($"Пароль пользователя {user.DisplayName} изменён на {newPassword}");
+
+            txtBox.Clear();
+            MessageBox.Show($"Пароль пользователя {user.DisplayName} изменён.");
         }
     }
 }

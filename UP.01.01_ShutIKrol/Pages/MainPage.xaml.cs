@@ -28,7 +28,6 @@ namespace UP._01._01_ShutIKrol.Pages
                 if (UserData.CurrentUser.Roles?.RoleName == "Администратор")
                 {
                     BtnAdmin.Visibility = Visibility.Visible;
-                    BtnAuthor.Visibility = Visibility.Visible;
                 }
                 else if (UserData.CurrentUser.Roles?.RoleName == "Автор")
                 {

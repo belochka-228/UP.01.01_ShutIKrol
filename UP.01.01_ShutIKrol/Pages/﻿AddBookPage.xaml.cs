@@ -81,9 +81,8 @@ private List<Genres> _selectedGenres;
                     IsFrozen = false
                 };
                 Core.Context.Books.Add(newBook);
-                Core.Context.SaveChanges(); // теперь у книги есть Id
+                Core.Context.SaveChanges();
 
-                // Добавляем жанры
                 if (_selectedGenres.Any())
                 {
                     int maxId = Core.Context.BookGenres.Any() ? Core.Context.BookGenres.Max(bg => bg.Id) : 0;

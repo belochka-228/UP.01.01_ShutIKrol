@@ -66,6 +66,7 @@
                                     <TextBlock Text="{Binding Rating, StringFormat='★{0}'}" FontWeight="Bold" Foreground="#FFD700" VerticalAlignment="Center" Margin="0,0,0,10"/>
                                    
                                     <Button Content="Жалоба" Background="Transparent" Foreground="#2196F3" Cursor="Hand" Click="BtnComplaintReview_Click" Tag="{Binding Id}" VerticalAlignment="Center"/>
+                                    <Button x:Name="BtnFreezeReview" Content="Заморозить" Background="Transparent" Foreground="#FF5722" BorderThickness="0" Cursor="Hand" Margin="10,0,0,0" Click="BtnFreezeReview_Click" Tag="{Binding Id}" Visibility="Collapsed" Loaded="BtnFreezeReview_Loaded"/>
                                 </StackPanel>
                                 <TextBlock Text="{Binding Text}" Margin="0,5,0,0" TextWrapping="Wrap"/>
                             </StackPanel>

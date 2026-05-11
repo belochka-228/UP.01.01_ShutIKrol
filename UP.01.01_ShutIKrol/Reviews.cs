@@ -20,6 +20,7 @@ namespace UP._01._01_ShutIKrol
         public string Text { get; set; }
         public int Rating { get; set; }
         public System.DateTime CreatedAt { get; set; }
+        public bool IsFrozen { get; set; }
     
         public virtual Books Books { get; set; }
         public virtual Users Users { get; set; }

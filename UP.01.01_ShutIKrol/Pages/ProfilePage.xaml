@@ -23,9 +23,7 @@
                 <TextBlock Text="{Binding Login}" FontSize="14" Foreground="Gray"/>
                 <TextBlock Text="{Binding Roles.RoleName, StringFormat='Роль: {0}'}" FontSize="14" FontWeight="SemiBold"/>
             </StackPanel>
-            <Button x:Name="BtnAuthorRequest" Content="✉ Подать на автора" 
-                    Background="#4CAF50" Foreground="White" BorderThickness="0"
-                    Width="150" Height="35" Margin="20,0,0,0" VerticalAlignment="Top"
+            <Button x:Name="BtnAuthorRequest" Content="✉ Подать на автора" Visibility="Visible" Background="#4CAF50" Foreground="White" BorderThickness="0" Width="150" Height="35" Margin="20,0,0,0" VerticalAlignment="Top"
                     Click="BtnAuthorRequest_Click"/>
         </StackPanel>
 

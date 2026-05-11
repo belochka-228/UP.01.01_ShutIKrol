@@ -38,17 +38,14 @@ namespace UP._01._01_ShutIKrol.Pages
             ListBoxStatuses.ItemsSource = _statuses;
             ListBoxStatuses.SelectedIndex = 0;
         }
-        // При изменении статуса
         private void ListBoxStatuses_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateList();
         }
-        // Поиск
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             UpdateList();
         }
-        // Сортировка
         private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateList();
@@ -59,27 +56,25 @@ namespace UP._01._01_ShutIKrol.Pages
 
             var filtered = _allUserBooks.AsEnumerable();
 
-            // Фильтр по статусу
             if (ListBoxStatuses.SelectedItem is StatusBooks selectedStatus && selectedStatus.Id != 0)
                 filtered = filtered.Where(r => r.StatusId == selectedStatus.Id);
-            // Поиск
+
             string text = TxtSearch.Text.ToLower();
             if (!string.IsNullOrWhiteSpace(text))
                 filtered = filtered.Where(r => r.Books.Title.ToLower().Contains(text) || r.Books.Users.DisplayName.ToLower().Contains(text));
-            // Сортировка
+
             switch (CmbSort.SelectedIndex)
             {
-                case 1: // По названию
+                case 1:
                     filtered = filtered.OrderBy(r => r.Books.Title);
                     break;
-                case 2: // По рейтингу
+                case 2:
                     filtered = filtered.OrderByDescending(r =>
                         r.Books.Reviews.Any() ? r.Books.Reviews.Average(rev => rev.Rating) : 0);
                     break;
             }
             ListBoxBooks.ItemsSource = filtered.ToList();
         }
-        // Переместить книгу
         private void BtnMove_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
@@ -88,9 +83,7 @@ namespace UP._01._01_ShutIKrol.Pages
                 var window = new MoveBookWindow(selectedEntry);
                 window.Owner = Window.GetWindow(this);
                 window.ShowDialog();
-                // Перезагружаем данные после закрытия окна
                 LoadData();
-                // Восстанавливаем выделение статуса (если возможно)
                 var currentStatus = ListBoxStatuses.SelectedItem as StatusBooks;
                 if (currentStatus != null)
                     ListBoxStatuses.SelectedItem = _statuses.FirstOrDefault(s => s.Id == currentStatus.Id);
@@ -98,7 +91,6 @@ namespace UP._01._01_ShutIKrol.Pages
                     ListBoxStatuses.SelectedIndex = 0;
             }
         }
-        // Открытие книги
         private void ListBoxBooks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (ListBoxBooks.SelectedItem is ReadingLists entry)

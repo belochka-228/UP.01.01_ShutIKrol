@@ -21,7 +21,7 @@ namespace UP._01._01_ShutIKrol.Pages
     {
         private int _targetTypeId;
         private string _targetName;
-        private int _bookId;         // обязательный BookId
+        private int _bookId;
         private List<ComplaintReasons> _reasons;
 
         public ComplaintWindow(int targetTypeId, string targetName, int bookId)
@@ -33,21 +33,20 @@ namespace UP._01._01_ShutIKrol.Pages
             _bookId = bookId;
 
             string typeText;
-            if (targetTypeId == 1)
-                typeText = "книгу";
-            else if (targetTypeId == 2)
-                typeText = "отзыв";
-            else if (targetTypeId == 3)
-                typeText = "автора";
-            else
-                typeText = "объект";
+            if (targetTypeId == 1) typeText = "книгу";
+            else if (targetTypeId == 2) typeText = "отзыв";
+            else if (targetTypeId == 3) typeText = "автора";
+            else typeText = "объект";
+
 
             TxtTargetInfo.Text = $"Жалоба на {typeText}";
             TxtTargetName.Text = targetName;
+
             _reasons = Core.Context.ComplaintReasons.ToList();
             CmbReasons.ItemsSource = _reasons;
             CmbReasons.SelectedIndex = 0;
         }
+
         private void BtnSend_Click(object sender, RoutedEventArgs e)
         {
             if (UserData.CurrentUser == null)
@@ -55,37 +54,42 @@ namespace UP._01._01_ShutIKrol.Pages
                 MessageBox.Show("Войдите в аккаунт.");
                 return;
             }
+
             if (CmbReasons.SelectedItem == null)
             {
                 MessageBox.Show("Выберите причину жалобы.");
                 return;
             }
+
             var selectedReason = (ComplaintReasons)CmbReasons.SelectedItem;
+
             var result = MessageBox.Show(
                 $"Отправить жалобу на {TxtTargetInfo.Text} «{_targetName}»?\nПричина: {selectedReason.Name}",
                 "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes) return;
+
             try
             {
                 var complaint = new Complaints
                 {
                     UserId = UserData.CurrentUser.Id,
-                    TargetTypeId = _targetTypeId,
+                    TargetTypeId = _targetTypeId,   // <-- ОБЯЗАТЕЛЬНО
                     ReasonId = selectedReason.Id,
                     BookId = _bookId,
                     CreatedAt = DateTime.Now
                 };
+
                 Core.Context.Complaints.Add(complaint);
                 Core.Context.SaveChanges();
 
-                MessageBox.Show("Жалоба отправлена.");
+                MessageBox.Show("Жалоба отправлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.DialogResult = true;
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
