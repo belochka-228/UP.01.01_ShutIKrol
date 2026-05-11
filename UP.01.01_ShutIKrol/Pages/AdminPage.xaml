@@ -106,10 +106,17 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="5" Margin="3">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор: {0}'}"/>
-                                        </StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор: {0}'}"/>
+                                            </StackPanel>
+                                            <Button Grid.Column="1" Content="Разморозить" Background="#4CAF50" Foreground="White" BorderThickness="0" Width="100" Height="26" Click="BtnUnfreezeBook_Click"/>
+                                        </Grid>
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -120,11 +127,18 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="5" Margin="3">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding DisplayName}"/>
-                                            <TextBlock Text="{Binding Login}"/>
-                                            <TextBlock Text="{Binding Roles.RoleName, StringFormat='Роль: {0}'}"/>
-                                        </StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding DisplayName}" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Login}"/>
+                                                <TextBlock Text="{Binding Roles.RoleName, StringFormat='Роль: {0}'}"/>
+                                            </StackPanel>
+                                            <Button Grid.Column="1" Content="Разморозить" Background="#4CAF50" Foreground="White" BorderThickness="0" Width="100" Height="26" Click="BtnUnfreezeUser_Click"/>
+                                        </Grid>
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -135,11 +149,18 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="5" Margin="3">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор отзыва: {0}'}" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap" MaxHeight="60"/>
-                                            <TextBlock Text="{Binding Books.Title, StringFormat='На книгу: {0}'}" FontStyle="Italic"/>
-                                        </StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock FontWeight="Bold" Text="{Binding Users.DisplayName, StringFormat='Автор отзыва: {0}'}"/>
+                                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" MaxHeight="60"/>
+                                                <TextBlock Text="{Binding Books.Title, StringFormat='На книгу: {0}'}" FontStyle="Italic"/>
+                                            </StackPanel>
+                                            <Button Grid.Column="1" Content="Разморозить" Background="#4CAF50" Foreground="White" BorderThickness="0" Width="100" Height="26" Click="BtnUnfreezeReview_Click"/>
+                                        </Grid>
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -172,7 +193,7 @@
                                         </StackPanel>
 
                                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                            <TextBox x:Name="TxtNewPassword" Width="120" Height="26" Margin="0,0,5,0" ToolTip="Введите новый пароль"/>
+                                            <PasswordBox x:Name="TxtNewPassword" Width="120" Height="26" Margin="0,0,5,0" ToolTip="Введите новый пароль"/>
                                             <Button Content="Сменить пароль" Background="#FFDDDDDD" BorderThickness="1" BorderBrush="#AAAAAA" Width="120" Height="26" Click="BtnChangePassword_Click"/>
                                         </StackPanel>
                                     </StackPanel>

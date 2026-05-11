@@ -23,6 +23,8 @@
                 <ComboBoxItem>По названию</ComboBoxItem>
                 <ComboBoxItem>По рейтингу</ComboBoxItem>
             </ComboBox>
+            <TextBlock Text="Жанр" VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
+            <ComboBox x:Name="CmbGenres" Width="150" Height="26" SelectionChanged="CmbGenres_SelectionChanged"/>
         </StackPanel>
 
         <ListBox Grid.Row="1" x:Name="ListBoxStatuses" BorderThickness="0" Background="Transparent" SelectionChanged="ListBoxStatuses_SelectionChanged">
@@ -39,14 +41,19 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
-        <ListBox Grid.Row="2" x:Name="ListBoxBooks" MouseDoubleClick="ListBoxBooks_MouseDoubleClick">
+
+        <ListBox Grid.Row="2" x:Name="ListBoxBooks" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MouseDoubleClick="ListBoxBooks_MouseDoubleClick">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="8" Margin="0,0,0,5">
+                    <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="8" Margin="0,0,0,5" Width="300">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="170"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">

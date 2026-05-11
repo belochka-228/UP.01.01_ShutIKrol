@@ -19,7 +19,6 @@
             <TextBox x:Name="TxtSearch" Width="180" Height="26"
                      TextChanged="TxtSearch_TextChanged"/>
             <TextBlock Text="Сорт." VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
-            <!-- Заменили ComboBox на ContentControl для программного создания -->
             <ContentControl x:Name="SortPlaceholder" Width="150" Height="26"
                             VerticalAlignment="Center" Margin="0,0,0,0"/>
             <TextBlock Text="Жанр" VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>

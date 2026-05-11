@@ -23,6 +23,7 @@ namespace UP._01._01_ShutIKrol.Pages
     {
         private List<ReadingLists> _allUserBooks;
         private List<StatusBooks> _statuses;
+        private List<Genres> _genres;
         public ReadingListsPage()
         {
             InitializeComponent();
@@ -37,6 +38,16 @@ namespace UP._01._01_ShutIKrol.Pages
             _statuses.Insert(0, new StatusBooks { Id = 0, Name = "Все" });
             ListBoxStatuses.ItemsSource = _statuses;
             ListBoxStatuses.SelectedIndex = 0;
+
+            _genres = Core.Context.Genres.ToList();
+            _genres.Insert(0, new Genres { Id = 0, Name = "Все жанры" });
+            CmbGenres.ItemsSource = _genres;
+            CmbGenres.DisplayMemberPath = "Name";
+            CmbGenres.SelectedIndex = 0;
+        }
+        private void CmbGenres_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateList();
         }
         private void ListBoxStatuses_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -62,6 +73,9 @@ namespace UP._01._01_ShutIKrol.Pages
             string text = TxtSearch.Text.ToLower();
             if (!string.IsNullOrWhiteSpace(text))
                 filtered = filtered.Where(r => r.Books.Title.ToLower().Contains(text) || r.Books.Users.DisplayName.ToLower().Contains(text));
+
+            if (CmbGenres.SelectedItem is Genres selectedGenre && selectedGenre.Id != 0)
+                filtered = filtered.Where(r => r.Books.BookGenres.Any(bg => bg.GenreId == selectedGenre.Id));
 
             switch (CmbSort.SelectedIndex)
             {

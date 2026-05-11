@@ -40,7 +40,13 @@ namespace UP._01._01_ShutIKrol.Pages
             }
             if (user.IsFrozen)
             {
-                MessageBoxResult result = MessageBox.Show("Ваш аккаунт заморожен! Хотите подать заявку на разморозку?", "Заморожен", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                string reason = "Причина не указана";
+                var lastComplaint = Core.Context.Complaints.Where(c => c.TargetTypeId == 3 && c.IsConfirmed == true && c.Books.AuthorId == user.Id).OrderByDescending(c => c.CreatedAt).FirstOrDefault();
+
+                if (lastComplaint != null && lastComplaint.ComplaintReasons != null)
+                    reason = lastComplaint.ComplaintReasons.Name;
+
+                MessageBoxResult result = MessageBox.Show($"Ваш аккаунт заморожен.\nПричина: {reason}\n\nХотите подать заявку на разморозку?", "Заморожен", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
                     var request = new UnfreezeApplications

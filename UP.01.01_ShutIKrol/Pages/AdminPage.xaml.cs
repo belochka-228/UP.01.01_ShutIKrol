@@ -100,6 +100,38 @@ namespace UP._01._01_ShutIKrol.Pages
 
             LoadComplaints();
         }
+        private void BtnUnfreezeBook_Click(object sender, RoutedEventArgs e)
+        {
+            var book = ((Button)sender).DataContext as Books;
+            if (book != null)
+            {
+                book.IsFrozen = false;
+                Core.Context.SaveChanges();
+                LoadFrozenObjects();
+            }
+        }
+
+        private void BtnUnfreezeUser_Click(object sender, RoutedEventArgs e)
+        {
+            var user = ((Button)sender).DataContext as Users;
+            if (user != null)
+            {
+                user.IsFrozen = false;
+                Core.Context.SaveChanges();
+                LoadFrozenObjects();
+            }
+        }
+
+        private void BtnUnfreezeReview_Click(object sender, RoutedEventArgs e)
+        {
+            var review = ((Button)sender).DataContext as Reviews;
+            if (review != null)
+            {
+                review.IsFrozen = false;
+                Core.Context.SaveChanges();
+                LoadFrozenObjects();
+            }
+        }
         private void BtnRejectComplaint_Click(object sender, RoutedEventArgs e)
         {
             var complaint = ((Button)sender).DataContext as Complaints;
