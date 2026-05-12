@@ -15,7 +15,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Информация о пользователе -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
             <StackPanel>
                 <TextBlock Text="{Binding DisplayName}" FontSize="28" FontWeight="Bold"/>
@@ -23,35 +22,24 @@
                 <TextBlock Text="{Binding Login}" FontSize="14" Foreground="Gray"/>
                 <TextBlock Text="{Binding Roles.RoleName, StringFormat='Роль: {0}'}" FontSize="14" FontWeight="SemiBold"/>
             </StackPanel>
-            <Button x:Name="BtnAuthorRequest" Content="✉ Подать на автора" Visibility="Visible" Background="#4CAF50" Foreground="White" BorderThickness="0" Width="150" Height="35" Margin="20,0,0,0" VerticalAlignment="Top"
-                    Click="BtnAuthorRequest_Click"/>
+            <Button x:Name="BtnAuthorRequest" Content="Подать на автора" Visibility="Visible" Background="#4CAF50" Foreground="White" Width="150" Height="35" Margin="30,0,0,0" VerticalAlignment="Top" Click="BtnAuthorRequest_Click"/>
         </StackPanel>
 
-        <!-- Отзывы пользователя -->
         <TextBlock Grid.Row="1" Text="Мои отзывы" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+        
         <ListBox Grid.Row="2" x:Name="ListBoxReviews">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,8">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Row="0" Grid.Column="0">
+                    <Border BorderBrush="#E0E0E0"  Padding="10" Margin="0,0,0,8">
+                        <StackPanel>
+                            <StackPanel Orientation ="Horizontal">
                                 <TextBlock Text="{Binding Books.Title}" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text=" — " Foreground="Gray"/>
                                 <TextBlock Text="{Binding CreatedAt, StringFormat='dd.MM.yyyy'}" FontSize="12" Foreground="Gray"/>
+                                <TextBlock Text="{Binding Rating, StringFormat=' ★{0}'}" FontWeight="Bold" Foreground="#FFD700" Margin="10,0,0,0"/>
                             </StackPanel>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Rating, StringFormat='★{0}'}" 
-                                       FontWeight="Bold" Foreground="#FFD700" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" 
-                                       Text="{Binding Text}" TextWrapping="Wrap" Margin="0,5,0,0"/>
-                        </Grid>
+                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                        </StackPanel>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>

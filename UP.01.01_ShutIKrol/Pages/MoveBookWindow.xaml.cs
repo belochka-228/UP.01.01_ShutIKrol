@@ -19,17 +19,17 @@ namespace UP._01._01_ShutIKrol.Pages
     /// </summary>
     public partial class MoveBookWindow : Window
     {
-        private ReadingLists _entry;
+        private ReadingLists _entry; //запись для изменения
 
         public MoveBookWindow(ReadingLists entry)
         {
             InitializeComponent();
-            _entry = entry;
-            DataContext = _entry;
+            _entry = entry; //сохраняем
+            DataContext = _entry; //контекст данных
 
             var statuses = Core.Context.StatusBooks.ToList();
-            CmbStatuses.ItemsSource = statuses;
-            CmbStatuses.SelectedItem = statuses.FirstOrDefault(s => s.Id == _entry.StatusId);
+            CmbStatuses.ItemsSource = statuses; //устанавливаем список
+            CmbStatuses.SelectedItem = statuses.FirstOrDefault(s => s.Id == _entry.StatusId); //текущий как выбранный
         }
 
         private void BtnMove_Click(object sender, RoutedEventArgs e)
@@ -42,7 +42,7 @@ namespace UP._01._01_ShutIKrol.Pages
                     return;
                 }
 
-                var dbEntry = Core.Context.ReadingLists.Find(_entry.Id);
+                var dbEntry = Core.Context.ReadingLists.Find(_entry.Id);//ищем запись по id
                 if (dbEntry != null)
                 {
                     dbEntry.StatusId = newStatus.Id;

@@ -32,57 +32,58 @@ namespace UP._01._01_ShutIKrol.Pages
         }
         private void RefreshData()
         {
-            _bookGenres = Core.Context.BookGenres.Where(bg => bg.BookId == _book.Id).Include("Genres").ToList();
-            ListBoxGenres.ItemsSource = _bookGenres;
-            var allGenres = Core.Context.Genres.ToList();
+            _bookGenres = Core.Context.BookGenres.Where(bg => bg.BookId == _book.Id).Include("Genres").ToList(); // получаем жанры книги из базы
+
+            var allGenres = Core.Context.Genres.ToList(); // обновляем список доступных жанров
             _availableGenres = allGenres.Where(g => !_bookGenres.Any(bg => bg.GenreId == g.Id)).OrderBy(g => g.Name).ToList();
 
+            // обновляем элементы
+            ListBoxGenres.ItemsSource = _bookGenres;
             CmbGenre.ItemsSource = _availableGenres;
             CmbGenre.SelectedIndex = _availableGenres.Any() ? 0 : -1;
         }
         private void BtnAddGenre_Click(object sender, RoutedEventArgs e)
         {
-            if (!(CmbGenre.SelectedItem is Genres selectedGenre)) return;
+            if (CmbGenre.SelectedItem == null) return;
+
+            Genres selectedGenre = (Genres)CmbGenre.SelectedItem; //берем выбранный жанр
+
             if (_bookGenres.Any(bg => bg.GenreId == selectedGenre.Id))
             {
                 MessageBox.Show("Этот жанр уже добавлен.");
                 return;
             }
 
-            int newId = Core.Context.BookGenres.Any() ? Core.Context.BookGenres.Max(bg => bg.Id) + 1 : 1;
-            var newBookGenre = new BookGenres { Id = newId, BookId = _book.Id, GenreId = selectedGenre.Id };
+            int newId = 1; //находим следующий ID для записи
+            if (Core.Context.BookGenres.Any())
+            {
+                newId = Core.Context.BookGenres.Max(bg => bg.Id) + 1; 
+            }
+            var newBookGenre = new BookGenres  //связь книга-жанр
+            { 
+                Id = newId, 
+                BookId = _book.Id, 
+                GenreId = selectedGenre.Id 
+            };
+
             Core.Context.BookGenres.Add(newBookGenre);
             Core.Context.SaveChanges();
 
+            // обновляем списки и интерфейс
             _bookGenres.Add(newBookGenre);
-            ListBoxGenres.ItemsSource = _bookGenres.ToList();
-
-            _availableGenres.Remove(selectedGenre);
-            CmbGenre.ItemsSource = null;
-            CmbGenre.ItemsSource = _availableGenres;
-            CmbGenre.SelectedIndex = _availableGenres.Any() ? 0 : -1;
+            RefreshData();
         }
         private void BtnDeleteGenre_Click(object sender, RoutedEventArgs e)
         {
-            var btn = (System.Windows.Controls.Button)sender;
-            var bookGenre = btn.DataContext as BookGenres;
+            var btn = (Button)sender;
+            BookGenres bookGenre = (BookGenres)btn.DataContext;
             if (bookGenre == null) return;
 
             Core.Context.BookGenres.Remove(bookGenre);
             Core.Context.SaveChanges();
 
             _bookGenres.Remove(bookGenre);
-            ListBoxGenres.ItemsSource = _bookGenres.ToList();
-
-            var genre = Core.Context.Genres.Find(bookGenre.GenreId);
-            if (genre != null)
-            {
-                _availableGenres.Add(genre);
-                _availableGenres = _availableGenres.OrderBy(g => g.Name).ToList();
-                CmbGenre.ItemsSource = null;
-                CmbGenre.ItemsSource = _availableGenres;
-                CmbGenre.SelectedIndex = _availableGenres.Any() ? 0 : -1;
-            }
+            RefreshData();           
         }
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {

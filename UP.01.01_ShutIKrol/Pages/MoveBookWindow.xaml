@@ -9,13 +9,11 @@
         WindowStartupLocation="CenterOwner">
     <Grid Margin="15">
         <StackPanel>
-            <TextBlock Text="Переместить книгу" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="Переместить книгу" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
             <TextBlock Text="{Binding Books.Title, StringFormat='Книга: {0}'}" Margin="0,0,0,5"/>
             <TextBlock Text="Новый статус:" Margin="0,10,0,5"/>
             <ComboBox x:Name="CmbStatuses" DisplayMemberPath="Name"/>
-            <Button Content="Переместить" Width="120" Height="30" Margin="0,20,0,0"
-                    Background="#2196F3" Foreground="White" BorderThickness="0"
-                    Click="BtnMove_Click"/>
+            <Button Content="Переместить" Width="120" Height="30" Margin="0,20,0,0" Background="#2196F3" Foreground="White" BorderThickness="0" Click="BtnMove_Click"/>
         </StackPanel>
     </Grid>
 </Window>

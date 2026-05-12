@@ -10,8 +10,7 @@
 
     <Grid Margin="15">
         <StackPanel>
-            <TextBlock Text="Подача жалобы" FontSize="22" FontWeight="Bold" 
-                       HorizontalAlignment="Center" Margin="0,0,0,15"/>
+            <TextBlock Text="Подача жалобы" FontSize="22" FontWeight="Bold"  HorizontalAlignment="Center" Margin="0,0,0,15"/>
 
             <TextBlock x:Name="TxtTargetInfo" FontSize="14" Margin="0,0,0,5"/>
             <TextBlock x:Name="TxtTargetName" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,15"/>
@@ -19,11 +18,7 @@
             <TextBlock Text="Причина жалобы:" Margin="0,0,0,5"/>
             <ComboBox x:Name="CmbReasons" DisplayMemberPath="Name"/>
 
-            <Button x:Name="BtnSend" Content="✉ Отправить жалобу" Width="180" Height="35" 
-                    Margin="0,20,0,0"
-                    Background="#FF5722" Foreground="White" BorderThickness="0"
-                    FontWeight="Bold" Cursor="Hand"
-                    Click="BtnSend_Click"/>
+            <Button x:Name="BtnSend" Content="Отправить жалобу" Width="180" Height="35" Margin="20" Background="#FF5722" Foreground="White" FontWeight="Bold" Click="BtnSend_Click"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -33,11 +33,6 @@ namespace UP._01._01_ShutIKrol.Pages
                 BtnAuthorRequest.Visibility = Visibility.Visible;
             else
                 BtnAuthorRequest.Visibility = Visibility.Collapsed;
-            if (user == null)
-            {
-                NavigationService?.GoBack();
-                return;
-            }
             if (user.IsFrozen)
             {
                 string reason = "Причина не указана";
@@ -73,9 +68,6 @@ namespace UP._01._01_ShutIKrol.Pages
         private void BtnAuthorRequest_Click(object sender, RoutedEventArgs e)
         {
             var user = UserData.CurrentUser;
-
-            if (user == null) return;
-
             bool alreadyRequested = Core.Context.AuthorApplications.Any(a => a.UserId == user.Id);
             if (alreadyRequested)
             {

@@ -22,7 +22,6 @@ namespace UP._01._01_ShutIKrol.Pages
         private int _targetTypeId;
         private string _targetName;
         private int _bookId;
-        private List<ComplaintReasons> _reasons;
 
         public ComplaintWindow(int targetTypeId, string targetName, int bookId)
         {
@@ -31,19 +30,20 @@ namespace UP._01._01_ShutIKrol.Pages
             _targetTypeId = targetTypeId;
             _targetName = targetName;
             _bookId = bookId;
-
             string typeText;
-            if (targetTypeId == 1) typeText = "книгу";
-            else if (targetTypeId == 2) typeText = "отзыв";
-            else if (targetTypeId == 3) typeText = "автора";
-            else typeText = "объект";
+            switch (targetTypeId)
+            {
+                case 1: typeText = "книгу"; break;
+                case 2: typeText = "отзыв"; break;
+                case 3: typeText = "автора"; break;
+                default: typeText = "объект"; break;
+            }
 
 
             TxtTargetInfo.Text = $"Жалоба на {typeText}";
             TxtTargetName.Text = targetName;
 
-            _reasons = Core.Context.ComplaintReasons.ToList();
-            CmbReasons.ItemsSource = _reasons;
+            CmbReasons.ItemsSource = Core.Context.ComplaintReasons.ToList();
             CmbReasons.SelectedIndex = 0;
         }
 
@@ -63,8 +63,7 @@ namespace UP._01._01_ShutIKrol.Pages
 
             var selectedReason = (ComplaintReasons)CmbReasons.SelectedItem;
 
-            var result = MessageBox.Show(
-                $"Отправить жалобу на {TxtTargetInfo.Text} «{_targetName}»?\nПричина: {selectedReason.Name}",
+            var result = MessageBox.Show($"Отправить жалобу на {TxtTargetInfo.Text} «{_targetName}»?\nПричина: {selectedReason.Name}",
                 "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes) return;
@@ -74,7 +73,7 @@ namespace UP._01._01_ShutIKrol.Pages
                 var complaint = new Complaints
                 {
                     UserId = UserData.CurrentUser.Id,
-                    TargetTypeId = _targetTypeId,   // <-- ОБЯЗАТЕЛЬНО
+                    TargetTypeId = _targetTypeId,
                     ReasonId = selectedReason.Id,
                     BookId = _bookId,
                     CreatedAt = DateTime.Now

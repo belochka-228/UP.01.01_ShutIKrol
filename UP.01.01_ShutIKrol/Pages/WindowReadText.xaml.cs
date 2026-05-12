@@ -24,7 +24,6 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             InitializeComponent();
             this.DataContext = new { Content = text };
-
         }
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {

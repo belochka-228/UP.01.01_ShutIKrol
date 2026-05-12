@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
             <TextBox x:Name="TxtSearch" Width="180" Height="26" Margin="5,0" TextChanged="TxtSearch_TextChanged"/>
             <TextBlock Text="Сорт." VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
             <ComboBox x:Name="CmbSort" Width="150" Height="26" SelectedIndex="0" SelectionChanged="CmbSort_SelectionChanged">
@@ -53,7 +53,7 @@
                     <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="8" Margin="0,0,0,5" Width="300">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="200"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">

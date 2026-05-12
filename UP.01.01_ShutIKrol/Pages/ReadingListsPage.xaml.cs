@@ -21,9 +21,9 @@ namespace UP._01._01_ShutIKrol.Pages
     /// </summary>
     public partial class ReadingListsPage : Page
     {
-        private List<ReadingLists> _allUserBooks;
-        private List<StatusBooks> _statuses;
-        private List<Genres> _genres;
+        private List<ReadingLists> _allUserBooks; //записи из ReadingLists 
+        private List<StatusBooks> _statuses; //статусы
+        private List<Genres> _genres; //жанры
         public ReadingListsPage()
         {
             InitializeComponent();
@@ -64,7 +64,6 @@ namespace UP._01._01_ShutIKrol.Pages
         private void UpdateList()
         {
             if (_allUserBooks == null) return;
-
             var filtered = _allUserBooks.AsEnumerable();
 
             if (ListBoxStatuses.SelectedItem is StatusBooks selectedStatus && selectedStatus.Id != 0)
@@ -91,18 +90,12 @@ namespace UP._01._01_ShutIKrol.Pages
         }
         private void BtnMove_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button)sender;
-            if (btn.DataContext is ReadingLists selectedEntry)
+            if (((Button)sender).DataContext is ReadingLists selectedEntry)
             {
                 var window = new MoveBookWindow(selectedEntry);
                 window.Owner = Window.GetWindow(this);
                 window.ShowDialog();
                 LoadData();
-                var currentStatus = ListBoxStatuses.SelectedItem as StatusBooks;
-                if (currentStatus != null)
-                    ListBoxStatuses.SelectedItem = _statuses.FirstOrDefault(s => s.Id == currentStatus.Id);
-                else
-                    ListBoxStatuses.SelectedIndex = 0;
             }
         }
         private void ListBoxBooks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
