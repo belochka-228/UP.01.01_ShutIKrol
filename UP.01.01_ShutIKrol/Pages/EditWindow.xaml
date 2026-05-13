@@ -18,7 +18,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Margin="5">
-            <TextBlock Text="Название: "/>
+            <TextBlock Text="Название книги: "/>
             <TextBox x:Name="TxtBoxTitle" Text="{Binding Title}" Margin="0 0 0 15" />
 
             <TextBlock Text="Путь к картинке:"/>
@@ -40,7 +40,7 @@
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="{Binding Genres.Name}"/>
-                            <Button x:Name="BtnDeleteGenre" Grid.Column="1" Margin="10 0 0 0"  Content="Удалить" FontSize="10" Click="BtnDeleteGenre_Click"/>
+                            <Button x:Name="BtnDeleteGenre" Grid.Column="1" Margin="10 0 0 0" Content="Удалить" FontSize="10" Click="BtnDeleteGenre_Click"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -52,7 +52,7 @@
             <TextBlock Text="Текст: "/>
             <TextBox x:Name="TxtBoxContent" Text="{Binding Content}" Margin="0 5 0 15" TextWrapping="Wrap"/>
 
-            <Button x:Name="BtnSave" Content="Сохранить" Background="#4CAF50" Foreground="White"  Width="150" HorizontalAlignment="Center" Click="BtnSave_Click"/>
+            <Button x:Name="BtnSave" Content="Сохранить" Background="#4CAF50" Foreground="White" Width="150" HorizontalAlignment="Center" Click="BtnSave_Click"/>
         </StackPanel>
     </Grid>
 </Window>

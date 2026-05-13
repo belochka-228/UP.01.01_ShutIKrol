@@ -82,8 +82,9 @@ namespace UP._01._01_ShutIKrol.Pages
                     filtered = filtered.OrderBy(r => r.Books.Title);
                     break;
                 case 2:
-                    filtered = filtered.OrderByDescending(r =>
-                        r.Books.Reviews.Any() ? r.Books.Reviews.Average(rev => rev.Rating) : 0);
+                    filtered = filtered.OrderByDescending(r => r.Books.Reviews.Any() ? r.Books.Reviews.Average(rev => rev.Rating) : 0);
+                    break;
+                default:
                     break;
             }
             ListBoxBooks.ItemsSource = filtered.ToList();
@@ -95,7 +96,7 @@ namespace UP._01._01_ShutIKrol.Pages
                 var window = new MoveBookWindow(selectedEntry);
                 window.Owner = Window.GetWindow(this);
                 window.ShowDialog();
-                LoadData();
+                UpdateList();
             }
         }
         private void ListBoxBooks_MouseDoubleClick(object sender, MouseButtonEventArgs e)

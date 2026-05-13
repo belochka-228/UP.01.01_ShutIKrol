@@ -19,10 +19,8 @@
             <TextBlock Text="Пароль"/>
             <PasswordBox x:Name="txtPassword" Margin="0,5,0,20" Height="25"/>
 
-            <Button Content="Войти" Height="30" Click="AutoButton_Click" 
-                    Background="#4CAF50" Foreground="White" BorderThickness="0"/>
-            <Button Content="Регистрация" Height="30" Click="RegisterButton_Click" 
-                    Background="Transparent" BorderThickness="1" Margin="0,5,0,0"/>
+            <Button Content="Войти" Height="30" Click="AutoButton_Click" Background="#4CAF50" Foreground="White" BorderThickness="0"/>
+            <Button Content="Регистрация" Height="30" Click="RegisterButton_Click" Background="Transparent" Margin="0,5,0,0"/>
         </StackPanel>
     </Grid>
 </Page>

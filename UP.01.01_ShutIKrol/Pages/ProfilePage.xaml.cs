@@ -74,7 +74,6 @@ namespace UP._01._01_ShutIKrol.Pages
                 MessageBox.Show("Вы уже подавали заявку на роль автора.");
                 return;
             }
-
             MessageBoxResult result = MessageBox.Show("Подать заявку на получение роли «Автор»?","Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {

@@ -26,7 +26,6 @@ namespace UP._01._01_ShutIKrol.Pages
             InitializeComponent();
             _entry = entry; //сохраняем
             DataContext = _entry; //контекст данных
-
             var statuses = Core.Context.StatusBooks.ToList();
             CmbStatuses.ItemsSource = statuses; //устанавливаем список
             CmbStatuses.SelectedItem = statuses.FirstOrDefault(s => s.Id == _entry.StatusId); //текущий как выбранный
@@ -41,7 +40,6 @@ namespace UP._01._01_ShutIKrol.Pages
                     MessageBox.Show("Книга уже находится в этом статусе.");
                     return;
                 }
-
                 var dbEntry = Core.Context.ReadingLists.Find(_entry.Id);//ищем запись по id
                 if (dbEntry != null)
                 {

@@ -16,19 +16,20 @@
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
             <TextBlock Text="🔍" FontSize="18" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <TextBox x:Name="TxtSearch" Width="180" Height="26"
-                     TextChanged="TxtSearch_TextChanged"/>
-            <TextBlock Text="Сорт." VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
-            <ContentControl x:Name="SortPlaceholder" Width="150" Height="26"
-                            VerticalAlignment="Center" Margin="0,0,0,0"/>
+            <TextBox x:Name="TxtSearch" Width="180" Height="26" TextChanged="TxtSearch_TextChanged" FontSize="14"/>
+            
+            <TextBlock Text="Сортировка" VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
+            <ComboBox x:Name="CmbSort" Width="150" Height="26" FontSize="12" VerticalAlignment="Center" SelectionChanged="CmbSort_SelectionChanged">
+                <ComboBoxItem Content="Без сортировки"/>
+                <ComboBoxItem Content="По названию"/>
+                <ComboBoxItem Content="По рейтингу"/>
+            </ComboBox>            
+            
             <TextBlock Text="Жанр" VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
-            <ContentControl x:Name="GenrePlaceholder" Width="150" Height="26"
-                            VerticalAlignment="Center" Margin="0,0,0,0"/>
+            <ComboBox x:Name="CmbGenres" Width="150" Height="26" FontSize="12" VerticalAlignment="Center" DisplayMemberPath="Name" SelectionChanged="CmbGenres_SelectionChanged"/>
         </StackPanel>
 
-        <ListBox Grid.Row="1" x:Name="ListBoxBooks"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 MouseDoubleClick="ListBoxBooks_MouseDoubleClick">
+        <ListBox Grid.Row="1" x:Name="ListBoxBooks" MouseDoubleClick="ListBoxBooks_MouseDoubleClick">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel/>
@@ -36,20 +37,12 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border Width="170" Margin="8" Background="White"
-                            BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8"
-                            Padding="8" Cursor="Hand">
+                    <Border Width="170" Margin="8" Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="8">
                         <StackPanel>
-                            <Image Source="{Binding CoverPath}" Width="150" Height="190"
-                                   Stretch="UniformToFill"/>
-                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="13"
-                                       Margin="0,6,0,2"/>
-                            <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор: {0}'}"
-                                       FontSize="11" Foreground="Gray" Margin="0,0,0,4"/>
-                            <Button Content="Добавить в список" Width="130" Height="28"
-                                    Background="#FFDDDDDD" BorderThickness="1"
-                                    BorderBrush="#AAAAAA" FontSize="12"
-                                    Click="BtnAddToList_Click"/>
+                            <Image Source="{Binding CoverPath}" Width="150" Height="190" Stretch="UniformToFill"/>
+                            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="12" Margin="0,6,0,2"/>
+                            <TextBlock Text="{Binding Users.DisplayName, StringFormat='Автор: {0}'}" FontSize="12" Foreground="Gray" Margin="0,0,0,4"/>
+                            <Button Content="Добавить в список" Width="130" Height="25" Background="#FFDDDDDD" BorderThickness="1" BorderBrush="#AAAAAA" FontSize="12" Click="BtnAddToList_Click"/>
                         </StackPanel>
                     </Border>
                 </DataTemplate>

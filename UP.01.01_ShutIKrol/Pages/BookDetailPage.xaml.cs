@@ -148,11 +148,6 @@ namespace UP._01._01_ShutIKrol.Pages
         }
         private void BtnFreezeReview_Click(object sender, RoutedEventArgs e)
         {
-            if (UserData.CurrentUser == null || UserData.CurrentUser.Roles == null || UserData.CurrentUser.Roles.RoleName != "Администратор")
-            {
-                MessageBox.Show("Недостаточно прав.");
-                return;
-            }
             Button btn = (Button)sender;
             int reviewId = (int)btn.Tag;
             var review = Core.Context.Reviews.FirstOrDefault(r => r.Id == reviewId);

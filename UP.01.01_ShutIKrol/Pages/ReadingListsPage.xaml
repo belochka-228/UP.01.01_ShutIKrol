@@ -15,19 +15,19 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBox x:Name="TxtSearch" Width="180" Height="26" Margin="5,0" TextChanged="TxtSearch_TextChanged"/>
-            <TextBlock Text="Сорт." VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
-            <ComboBox x:Name="CmbSort" Width="150" Height="26" SelectedIndex="0" SelectionChanged="CmbSort_SelectionChanged">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,5">
+            <TextBox x:Name="TxtSearch" Width="180" Height="25" Margin="5,0" TextChanged="TxtSearch_TextChanged"/>
+            <TextBlock Text="Сортировка" VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
+            <ComboBox x:Name="CmbSort" Width="150" Height="25" FontSize="12" SelectedIndex="0" SelectionChanged="CmbSort_SelectionChanged">
                 <ComboBoxItem>Без</ComboBoxItem>
                 <ComboBoxItem>По названию</ComboBoxItem>
                 <ComboBoxItem>По рейтингу</ComboBoxItem>
             </ComboBox>
             <TextBlock Text="Жанр" VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
-            <ComboBox x:Name="CmbGenres" Width="150" Height="26" SelectionChanged="CmbGenres_SelectionChanged"/>
+            <ComboBox x:Name="CmbGenres" FontSize="12" Width="150" Height="25" SelectionChanged="CmbGenres_SelectionChanged"/>
         </StackPanel>
 
-        <ListBox Grid.Row="1" x:Name="ListBoxStatuses" BorderThickness="0" Background="Transparent" SelectionChanged="ListBoxStatuses_SelectionChanged">
+        <ListBox Grid.Row="1" x:Name="ListBoxStatuses"  Background="Transparent" SelectionChanged="ListBoxStatuses_SelectionChanged">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel/>
@@ -35,14 +35,14 @@
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="10" Margin="3" Padding="5">
-                        <Button Content="{Binding Name}" BorderThickness="0" Background="Transparent" IsHitTestVisible="False" Focusable="False"/>
+                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Margin="3" Padding="5">
+                        <Button Content="{Binding Name}" FontSize="12" BorderThickness="0" Background="Transparent" IsHitTestVisible="False" Focusable="False"/>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox Grid.Row="2" x:Name="ListBoxBooks" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MouseDoubleClick="ListBoxBooks_MouseDoubleClick">
+        <ListBox Grid.Row="2" x:Name="ListBoxBooks" MouseDoubleClick="ListBoxBooks_MouseDoubleClick">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel/>
@@ -53,14 +53,16 @@
                     <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5" Padding="8" Margin="0,0,0,5" Width="270">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="{Binding Books.Title}" FontWeight="Bold" FontSize="13"/>
-                                <TextBlock Text="{Binding Books.Users.DisplayName, StringFormat='Автор: {0}'}" FontSize="11" Foreground="Gray"/>
+                            <Image Grid.Column="0" Source="{Binding Books.CoverPath}" Width="50" Height="70" Margin="0,0,10,0"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding Books.Title}" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="{Binding Books.Users.DisplayName, StringFormat='Автор: {0}'}" FontSize="12" Foreground="Gray"/>
                             </StackPanel>
-                            <Button Grid.Column="1" Content="Переместить" Background="#FFDDDDDD" BorderThickness="1" BorderBrush="#AAAAAA" FontSize="12" Click="BtnMove_Click"/>
+                            <Button Grid.Column="2" Content="Переместить" Height="25" Background="#FFDDDDDD" BorderThickness="1" BorderBrush="#AAAAAA" FontSize="12" Click="BtnMove_Click"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

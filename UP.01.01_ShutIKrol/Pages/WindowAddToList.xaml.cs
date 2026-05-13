@@ -34,11 +34,6 @@ namespace UP._01._01_ShutIKrol.Pages
         }
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (UserData.CurrentUser == null)
-            {
-                MessageBox.Show("Войдите в аккаунт.");
-                return;
-            }
             if (_selectedStatus == null)
             {
                 MessageBox.Show("Выберите статус.");

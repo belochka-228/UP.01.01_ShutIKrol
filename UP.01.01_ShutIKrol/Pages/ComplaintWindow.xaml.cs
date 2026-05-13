@@ -49,25 +49,16 @@ namespace UP._01._01_ShutIKrol.Pages
 
         private void BtnSend_Click(object sender, RoutedEventArgs e)
         {
-            if (UserData.CurrentUser == null)
-            {
-                MessageBox.Show("Войдите в аккаунт.");
-                return;
-            }
-
             if (CmbReasons.SelectedItem == null)
             {
                 MessageBox.Show("Выберите причину жалобы.");
                 return;
             }
-
             var selectedReason = (ComplaintReasons)CmbReasons.SelectedItem;
-
             var result = MessageBox.Show($"Отправить жалобу на {TxtTargetInfo.Text} «{_targetName}»?\nПричина: {selectedReason.Name}",
                 "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes) return;
-
             try
             {
                 var complaint = new Complaints
@@ -81,7 +72,6 @@ namespace UP._01._01_ShutIKrol.Pages
 
                 Core.Context.Complaints.Add(complaint);
                 Core.Context.SaveChanges();
-
                 MessageBox.Show("Жалоба отправлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.DialogResult = true;
                 this.Close();

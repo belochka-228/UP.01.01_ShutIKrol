@@ -25,12 +25,12 @@
             <Button x:Name="BtnAuthorRequest" Content="Подать на автора" Visibility="Visible" Background="#4CAF50" Foreground="White" Width="150" Height="35" Margin="30,0,0,0" VerticalAlignment="Top" Click="BtnAuthorRequest_Click"/>
         </StackPanel>
 
-        <TextBlock Grid.Row="1" Text="Мои отзывы" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+        <TextBlock Grid.Row="1" Text="Мои отзывы" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
         
         <ListBox Grid.Row="2" x:Name="ListBoxReviews">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#E0E0E0"  Padding="10" Margin="0,0,0,8">
+                    <Border BorderBrush="#E0E0E0" Padding="10" Margin="0,0,0,8">
                         <StackPanel>
                             <StackPanel Orientation ="Horizontal">
                                 <TextBlock Text="{Binding Books.Title}" FontWeight="Bold" FontSize="14"/>

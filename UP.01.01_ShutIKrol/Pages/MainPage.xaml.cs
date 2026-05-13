@@ -23,22 +23,19 @@ namespace UP._01._01_ShutIKrol.Pages
         public MainPage()
         {
             InitializeComponent();
-            if (UserData.CurrentUser != null)
+            if (UserData.CurrentUser.Roles?.RoleName == "Администратор")
             {
-                if (UserData.CurrentUser.Roles?.RoleName == "Администратор")
-                {
-                    BtnAdmin.Visibility = Visibility.Visible;
-                }
-                else if (UserData.CurrentUser.Roles?.RoleName == "Автор")
-                {
-                    BtnAuthor.Visibility = Visibility.Visible;
-                }
-                if (UserData.CurrentUser.IsFrozen)
-                {
-                    BtnFrozen.Visibility = Visibility.Visible;
-                }
+                BtnAdmin.Visibility = Visibility.Visible;
             }
-            ContentFrame.Navigate(new CatalogPage());
+            else if (UserData.CurrentUser.Roles?.RoleName == "Автор")
+            {
+                BtnAuthor.Visibility = Visibility.Visible;
+            }
+            if (UserData.CurrentUser.IsFrozen)
+            {
+                BtnFrozen.Visibility = Visibility.Visible;
+            }
+        ContentFrame.Navigate(new CatalogPage());
         }
         private void BtnCatalog_Click(object sender, RoutedEventArgs e)
         {
