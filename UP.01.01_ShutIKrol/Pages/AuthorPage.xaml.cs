@@ -22,7 +22,6 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             private List<Books> _activeBooks;
             private List<Books> _frozenBooks;
-
             public AuthorPage()
             {
                 InitializeComponent();
@@ -38,16 +37,13 @@ namespace UP._01._01_ShutIKrol.Pages
                 }
                 _activeBooks = Core.Context.Books.Where(b => b.AuthorId == currentUserId && !b.IsFrozen).ToList();
                 ListBoxBooks.ItemsSource = _activeBooks;
-
                 _frozenBooks = Core.Context.Books.Where(b => b.AuthorId == currentUserId && b.IsFrozen).ToList();
                 ListBoxFrozenBooks.ItemsSource = _frozenBooks;
             }
-
             private void BtnAddNewBook_Click(object sender, RoutedEventArgs e)
             {
-            NavigationService?.Navigate(new __AddBookPage());
+                NavigationService?.Navigate(new __AddBookPage());
             }
-
             private void BtnEditBook_Click(object sender, RoutedEventArgs e)
             {
                 var btn = (Button)sender;
@@ -58,17 +54,12 @@ namespace UP._01._01_ShutIKrol.Pages
                     window.ShowDialog();
                 }
             }
-
             private void BtnDefrozeBook_Click(object sender, RoutedEventArgs e)
             {
                 Button btn = (Button)sender;
                 if (btn.DataContext is Books selectedBook)
                 {
-                    MessageBoxResult result = MessageBox.Show(
-                        $"Оспорить заморозку книги «{selectedBook.Title}»?",
-                        "Оспаривание заморозки",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question);
+                    MessageBoxResult result = MessageBox.Show($"Оспорить заморозку книги «{selectedBook.Title}»?", "Оспаривание заморозки", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                     if (result == MessageBoxResult.Yes)
                     {
@@ -84,13 +75,11 @@ namespace UP._01._01_ShutIKrol.Pages
                             };
                             Core.Context.UnfreezeApplications.Add(request);
                             Core.Context.SaveChanges();
-                            MessageBox.Show("Заявка на разморозку отправлена.", "Успех",
-                                MessageBoxButton.OK, MessageBoxImage.Information);
+                            MessageBox.Show("Заявка на разморозку отправлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка",   MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
                 }

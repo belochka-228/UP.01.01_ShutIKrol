@@ -8,6 +8,9 @@ namespace UP._01._01_ShutIKrol
 {
     public static class UserData
     {
+        /// <summary>
+        /// хранение текущего пользователя
+        /// </summary>
         public static Users CurrentUser { get; set; } = null;
     }
 }

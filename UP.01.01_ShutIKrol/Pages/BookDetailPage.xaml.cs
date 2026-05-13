@@ -21,29 +21,37 @@ namespace UP._01._01_ShutIKrol.Pages
         private Books _book;
         private List<ComplaintTargetTypes> _complaintTargetTypes;
         private List<Reviews> _reviews;
-
         public BookDetailPage(Books book)
         {
             InitializeComponent();
-
             _book = book;
             DataContext = _book;
-
             double avgRating = _book.Reviews.Any() ? _book.Reviews.Average(r => r.Rating) : 0;
             TxtRating.Text = avgRating.ToString("0");
 
             _complaintTargetTypes = Core.Context.ComplaintTargetTypes.ToList();
             LoadReviews();
-
-            if (UserData.CurrentUser != null && UserData.CurrentUser.Roles?.RoleName == "Администратор")
+            if (UserData.CurrentUser.Roles != null)
             {
-                BtnFreezeBook.Visibility = Visibility.Visible;
+                if (UserData.CurrentUser.Roles.RoleName == "Администратор")
+                {
+                    BtnFreezeBook.Visibility = Visibility.Visible;
+                }
             }
-        } 
+        }
         private void LoadReviews()
         {
+            ReviewsList.Items.Clear();
             var reviews = Core.Context.Reviews.Where(r => r.BookId == _book.Id && !r.IsFrozen).Include("Users").ToList();
-            ReviewsList.ItemsSource = reviews;
+            foreach (var review in reviews)
+            {
+                ReviewsList.Items.Add(review);
+            }
+        }
+        private void BtnFreezeReview_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (UserData.CurrentUser?.Roles?.RoleName == "Администратор")
+                ((Button)sender).Visibility = Visibility.Visible;
         }
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
@@ -53,46 +61,84 @@ namespace UP._01._01_ShutIKrol.Pages
                 window.Owner = Window.GetWindow(this);
                 window.Show();
             }
-            else
-            {
-                MessageBox.Show("У этой книги еще нет текста для чтения.");
-            }
         }
         private void BtnAddToList_Click(object sender, RoutedEventArgs e)
         {
             var window = new WindowAddToList(_book);
             window.Owner = Window.GetWindow(this);
             window.ShowDialog();
-            NavigationService?.Navigate(new CatalogPage());
         }
         private void BtnComplaintBook_Click(object sender, RoutedEventArgs e)
         {
-            var window = new ComplaintWindow(1, _book.Title, _book.Id);
+            ComplaintWindow window = new ComplaintWindow(1, _book.Title, _book.Id);
             window.Owner = Window.GetWindow(this);
             window.ShowDialog();
         }
-
         private void BtnComplaintAuthor_Click(object sender, RoutedEventArgs e)
         {
-            var window = new ComplaintWindow(3, _book.Users?.DisplayName ?? "Автор", _book.Id);
+            string authorName = "Автор";
+            if (_book.Users != null && _book.Users.DisplayName != null)
+            {
+                authorName = _book.Users.DisplayName;
+            }
+            ComplaintWindow window = new ComplaintWindow(3, authorName, _book.Id);
             window.Owner = Window.GetWindow(this);
             window.ShowDialog();
         }
-
         private void BtnComplaintReview_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag != null)
+            Button btn = (Button)sender;
+            if (btn.Tag != null)
             {
                 int reviewId = Convert.ToInt32(btn.Tag);
-                var window = new ComplaintWindow(2, $"Отзыв #{reviewId}", _book.Id);
+                ComplaintWindow window = new ComplaintWindow(2, $"Отзыв #{reviewId}", _book.Id);
                 window.Owner = Window.GetWindow(this);
                 window.ShowDialog();
             }
         }
+        private void BtnSubmitReview_Click(object sender, RoutedEventArgs e)
+        {
+            string text = TxtNewReview.Text.Trim();
+            if (text == "")
+            {
+                MessageBox.Show("Введите текст отзыва.");
+                return;
+            }
+            ComboBoxItem selectedItem = (ComboBoxItem)CmbRating.SelectedItem;
+            int rating = int.Parse(selectedItem.Content.ToString());
+            Reviews newReview = new Reviews
+            {
+                BookId = _book.Id,
+                UserId = UserData.CurrentUser.Id,
+                Text = text,
+                Rating = rating,
+                CreatedAt = DateTime.Now,
+                IsFrozen = false
+            };
+            Core.Context.Reviews.Add(newReview);
+            Core.Context.SaveChanges();
+            TxtNewReview.Clear();
+            CmbRating.SelectedIndex = 0;
+            LoadReviews();
+            UpdateAverageRating();
+        }
+        private void UpdateAverageRating()
+        {
+            double avgRating = 0;
+            if (_book.Reviews.Count > 0)
+            {
+                double sum = 0;
+                foreach (var review in _book.Reviews)
+                {
+                    sum += review.Rating;
+                }
+                avgRating = sum / _book.Reviews.Count;
+            }
+            TxtRating.Text = Math.Round(avgRating).ToString();
+        }
         private void BtnFreezeBook_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show($"Заморозить книгу «{_book.Title}»?",
-                "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show($"Заморозить книгу «{_book.Title}»?","Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
                 _book.IsFrozen = true;
@@ -100,38 +146,33 @@ namespace UP._01._01_ShutIKrol.Pages
                 MessageBox.Show("Книга заморожена.");
             }
         }
-        private void BtnFreezeReview_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (UserData.CurrentUser?.Roles?.RoleName == "Администратор")
-                ((Button)sender).Visibility = Visibility.Visible;
-        }
-
         private void BtnFreezeReview_Click(object sender, RoutedEventArgs e)
         {
-            if (UserData.CurrentUser?.Roles?.RoleName != "Администратор")
+            if (UserData.CurrentUser == null || UserData.CurrentUser.Roles == null || UserData.CurrentUser.Roles.RoleName != "Администратор")
             {
                 MessageBox.Show("Недостаточно прав.");
                 return;
             }
-
             Button btn = (Button)sender;
             int reviewId = (int)btn.Tag;
             var review = Core.Context.Reviews.FirstOrDefault(r => r.Id == reviewId);
-            if (review == null) return;
 
+            if (review == null)
+            {
+                MessageBox.Show("Отзыв не найден.");
+                return;
+            }
             if (review.IsFrozen)
             {
                 MessageBox.Show("Этот отзыв уже заморожен.");
                 return;
             }
-
-            MessageBoxResult result = MessageBox.Show("Заморозить этот отзыв?",
-                "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show("Заморозить этот отзыв?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
                 review.IsFrozen = true;
                 Core.Context.SaveChanges();
-                LoadReviews(); // обновить список
+                LoadReviews();
             }
         }
         private void BtnBack_Click(object sender, RoutedEventArgs e)

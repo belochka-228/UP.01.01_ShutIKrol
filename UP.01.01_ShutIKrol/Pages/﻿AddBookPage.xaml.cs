@@ -28,7 +28,6 @@ namespace UP._01._01_ShutIKrol.Pages
             _selectedGenres = new List<Genres>();
             RefreshGenres();
         }
-
         private void RefreshGenres()
         {
             var allGenres = Core.Context.Genres.OrderBy(g => g.Name).ToList();
@@ -37,7 +36,6 @@ namespace UP._01._01_ShutIKrol.Pages
             CmbGenre.SelectedIndex = _availableGenres.Any() ? 0 : -1;
             ListBoxGenres.ItemsSource = _selectedGenres.ToList();
         }
-
         private void BtnAddGenre_Click(object sender, RoutedEventArgs e)
         {
             if (CmbGenre.SelectedItem is Genres selectedGenre)
@@ -51,14 +49,12 @@ namespace UP._01._01_ShutIKrol.Pages
                 RefreshGenres();
             }
         }
-
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             string coverPath = TxtCoverPath.Text.Trim();
             string title = TxtTitle.Text.Trim();
             string description = TxtDescription.Text.Trim();
             string content = TxtContent.Text.Trim();
-
             if (string.IsNullOrWhiteSpace(coverPath) ||
                 string.IsNullOrWhiteSpace(title) ||
                 string.IsNullOrWhiteSpace(description) ||
@@ -67,7 +63,6 @@ namespace UP._01._01_ShutIKrol.Pages
                 MessageBox.Show("Все поля обязательны для заполнения.");
                 return;
             }
-
             try
             {
                 var newBook = new Books
@@ -81,7 +76,6 @@ namespace UP._01._01_ShutIKrol.Pages
                 };
                 Core.Context.Books.Add(newBook);
                 Core.Context.SaveChanges();
-
                 if (_selectedGenres.Any())
                 {
                     int maxId = Core.Context.BookGenres.Any() ? Core.Context.BookGenres.Max(bg => bg.Id) : 0;
