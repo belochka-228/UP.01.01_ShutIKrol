@@ -20,9 +20,8 @@ namespace UP._01._01_ShutIKrol.Pages
     /// </summary>
     public partial class __AddBookPage : Page
     {
-private List<Genres> _selectedGenres;
+        private List<Genres> _selectedGenres;
         private List<Genres> _availableGenres;
-
         public __AddBookPage()
         {
             InitializeComponent();
