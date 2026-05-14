@@ -186,15 +186,25 @@
                                         <TextBlock Text="{Binding Roles.RoleName, StringFormat='Роль: {0}'}"/>
                                     </StackPanel>
 
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0">
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="15,0,0,0">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="Роль:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                                             <ComboBox x:Name="CmbRole" Width="120" Height="26" Loaded="CmbRole_Loaded" SelectionChanged="CmbRole_SelectionChanged"/>
                                         </StackPanel>
 
                                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                            <PasswordBox x:Name="TxtNewPassword" Width="120" Height="26" Margin="0,0,5,0" ToolTip="Введите новый пароль"/>
-                                            <Button Content="Сменить пароль" Background="#FFDDDDDD" BorderThickness="1" BorderBrush="#AAAAAA" Width="120" Height="26" Click="BtnChangePassword_Click"/>
+                                            <Button Content="Сменить пароль" Margin="10,0,0,0" Background="#FFDDDDDD" BorderThickness="1" BorderBrush="#AAAAAA" Width="120" Height="26" Click="BtnOpenPasswordWindow_Click">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Roles.RoleName}" Value="Администратор">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>

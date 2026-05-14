@@ -65,6 +65,14 @@ namespace UP._01._01_ShutIKrol.Pages
             var reviews = Core.Context.Reviews.Where(r => r.UserId == user.Id).Include("Books").OrderByDescending(r => r.CreatedAt).ToList();
             ListBoxReviews.ItemsSource = reviews;
         }
+        private void BtnChangePasswordProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (Button)sender;
+            var user = btn.DataContext as Users;
+            if (user == null) return;
+            var window = new ChangePasswordWindow(user);
+            window.ShowDialog();
+        }
         private void BtnAuthorRequest_Click(object sender, RoutedEventArgs e)
         {
             var user = UserData.CurrentUser;

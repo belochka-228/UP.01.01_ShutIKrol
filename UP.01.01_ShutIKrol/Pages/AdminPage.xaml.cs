@@ -235,29 +235,13 @@ namespace UP._01._01_ShutIKrol.Pages
                 LoadAllUsers();
             }
         }
-        private void BtnChangePassword_Click(object sender, RoutedEventArgs e)
+        private void BtnOpenPasswordWindow_Click(object sender, RoutedEventArgs e)
         {
             var btn = (Button)sender;
-            var parentStack = (StackPanel)btn.Parent;
-            var txtBox = parentStack.Children[0] as TextBox;
-
-            if (txtBox == null) return;
-
             var user = btn.DataContext as Users;
             if (user == null) return;
-
-            string newPassword = txtBox.Text.Trim();
-            if (string.IsNullOrWhiteSpace(newPassword))
-            {
-                MessageBox.Show("Введите новый пароль.");
-                return;
-            }
-
-            user.Password = newPassword;
-            Core.Context.SaveChanges();
-
-            txtBox.Clear();
-            MessageBox.Show($"Пароль пользователя {user.DisplayName} изменён.");
+            var window = new ChangePasswordWindow(user);
+            window.ShowDialog();
         }
     }
 }
