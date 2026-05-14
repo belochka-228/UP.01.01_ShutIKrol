@@ -19,7 +19,7 @@
             <TextBox x:Name="TxtSearch" Width="180" Height="26" TextChanged="TxtSearch_TextChanged" FontSize="14"/>
             
             <TextBlock Text="Сортировка" VerticalAlignment="Center" Margin="10,0,5,0" FontSize="14"/>
-            <ComboBox x:Name="CmbSort" Width="150" Height="26" FontSize="12" VerticalAlignment="Center" SelectionChanged="CmbSort_SelectionChanged">
+            <ComboBox x:Name="CmbSort" Width="150" Height="26" FontSize="12" VerticalAlignment="Center" SelectedIndex="0" SelectionChanged="CmbSort_SelectionChanged">
                 <ComboBoxItem Content="Без сортировки"/>
                 <ComboBoxItem Content="По названию"/>
                 <ComboBoxItem Content="По рейтингу"/>

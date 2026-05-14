@@ -25,223 +25,195 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             InitializeComponent();
             DataContext = UserData.CurrentUser;
-            LoadDate();        }
-
-        private void LoadDate()
+            LoadData();
+        }
+        private void LoadData()
         {
             LoadComplaints();
             LoadUnfreezeRequests();
             LoadAuthorRequests();
             LoadFrozenObjects();
-            LoadAllUsers();
+            LoadUsers();
         }
+
         private void LoadComplaints()
         {
-            var complaints = Core.Context.Complaints.Where(c => c.IsConfirmed == null).Include("Users").Include("ComplaintTargetTypes").Include("ComplaintReasons").Include("Books").ToList();
-            ListBoxComplaints.ItemsSource = complaints;
+            ListBoxComplaints.ItemsSource = Core.Context.Complaints.Where(x => x.IsConfirmed == null).Include(x => x.Users).Include(x => x.ComplaintReasons).Include(x => x.ComplaintTargetTypes).Include(x => x.Books).ToList();
         }
         private void LoadUnfreezeRequests()
         {
-            var requests = Core.Context.UnfreezeApplications.Where(r => r.IsConfirmed == null).Include("Users").Include("Books").ToList();
-            ListBoxUnfreeze.ItemsSource = requests;
+            ListBoxUnfreeze.ItemsSource = Core.Context.UnfreezeApplications.Where(x => x.IsConfirmed == null).Include(x => x.Users).Include(x => x.Books).ToList();
         }
         private void LoadAuthorRequests()
         {
-            var apps = Core.Context.AuthorApplications.Where(a => a.StatusId == 1).Include("Users").ToList();
-            ListBoxAuthorApps.ItemsSource = apps;
+            ListBoxAuthorApps.ItemsSource = Core.Context.AuthorApplications.Where(x => x.StatusId == 1).Include(x => x.Users).ToList();
         }
         private void LoadFrozenObjects()
         {
-            ListBoxFrozenBooks.ItemsSource = Core.Context.Books.Where(b => b.IsFrozen).Include("Users").ToList();
-            ListBoxFrozenUsers.ItemsSource = Core.Context.Users.Where(u => u.IsFrozen).Include("Roles").ToList();
-            ListBoxFrozenReviews.ItemsSource = Core.Context.Reviews.Where(r => r.IsFrozen).Include("Users").Include("Books").ToList();
+            ListBoxFrozenBooks.ItemsSource = Core.Context.Books.Where(x => x.IsFrozen).Include(x => x.Users).ToList();
+            ListBoxFrozenUsers.ItemsSource = Core.Context.Users.Where(x => x.IsFrozen).Include(x => x.Roles).ToList();
+            ListBoxFrozenReviews.ItemsSource = Core.Context.Reviews.Where(x => x.IsFrozen).Include(x => x.Users).Include(x => x.Books).ToList();
         }
-        private void LoadAllUsers()
+        private void LoadUsers()
         {
-            var users = Core.Context.Users.Include("Roles").ToList();
-            ListBoxAllUsers.ItemsSource = users;
+            ListBoxAllUsers.ItemsSource = Core.Context.Users.Include(x => x.Roles).ToList();
         }
         private void BtnAcceptComplaint_Click(object sender, RoutedEventArgs e)
         {
-            var complaint = ((Button)sender).DataContext as Complaints;
-            if (complaint == null) return;
-
+            var complaint = (sender as Button).DataContext as Complaints;
+            if (complaint == null)
+                return;
             complaint.IsConfirmed = true;
+            if (complaint.TargetTypeId == 1)
+            {
+                var book = Core.Context.Books.FirstOrDefault(x => x.Id == complaint.BookId);
+                if (book != null)
+                    book.IsFrozen = true;
+            }
+            if (complaint.TargetTypeId == 3)
+            {
+                var book = Core.Context.Books.FirstOrDefault(x => x.Id == complaint.BookId);
+                if (book != null)
+                {
+                    var user = Core.Context.Users.FirstOrDefault(x => x.Id == book.AuthorId);
+                    if (user != null)
+                        user.IsFrozen = true;
+                }
+            }
             Core.Context.SaveChanges();
-
-            switch (complaint.TargetTypeId)
-            {
-                case 1: // Book — заморозка книги
-                    var book = Core.Context.Books.FirstOrDefault(b => b.Id == complaint.BookId);
-                    if (book != null)
-                    {
-                        book.IsFrozen = true;
-                        Core.Context.SaveChanges();
-                    }
-                    break;
-
-                case 3: // Author — заморозка автора книги
-                    var targetBook = Core.Context.Books.FirstOrDefault(b => b.Id == complaint.BookId);
-                    if (targetBook != null)
-                    {
-                        var author = Core.Context.Users.FirstOrDefault(u => u.Id == targetBook.AuthorId);
-                        if (author != null)
-                        {
-                            author.IsFrozen = true;
-                            Core.Context.SaveChanges();
-                        }
-                    }
-                    break;
-
-                case 2: // Review — просто подтверждаем, без заморозки
-                default:
-                    break;
-            }
-
             LoadComplaints();
-        }
-        private void BtnUnfreezeBook_Click(object sender, RoutedEventArgs e)
-        {
-            var book = ((Button)sender).DataContext as Books;
-            if (book != null)
-            {
-                book.IsFrozen = false;
-                Core.Context.SaveChanges();
-                LoadFrozenObjects();
-            }
-        }
-
-        private void BtnUnfreezeUser_Click(object sender, RoutedEventArgs e)
-        {
-            var user = ((Button)sender).DataContext as Users;
-            if (user != null)
-            {
-                user.IsFrozen = false;
-                Core.Context.SaveChanges();
-                LoadFrozenObjects();
-            }
-        }
-
-        private void BtnUnfreezeReview_Click(object sender, RoutedEventArgs e)
-        {
-            var review = ((Button)sender).DataContext as Reviews;
-            if (review != null)
-            {
-                review.IsFrozen = false;
-                Core.Context.SaveChanges();
-                LoadFrozenObjects();
-            }
+            LoadFrozenObjects();
         }
         private void BtnRejectComplaint_Click(object sender, RoutedEventArgs e)
         {
-            var complaint = ((Button)sender).DataContext as Complaints;
-            if (complaint == null) return;
-
+            var complaint = (sender as Button).DataContext as Complaints;
+            if (complaint == null)
+                return;
             complaint.IsConfirmed = false;
             Core.Context.SaveChanges();
             LoadComplaints();
         }
         private void BtnAcceptUnfreeze_Click(object sender, RoutedEventArgs e)
         {
-            var request = ((Button)sender).DataContext as UnfreezeApplications;
-            if (request == null) return;
-
+            var request = (sender as Button).DataContext as UnfreezeApplications;
+            if (request == null)
+                return;
             request.IsConfirmed = true;
-            Core.Context.SaveChanges();
             if (request.BookId != null)
             {
-                var book = Core.Context.Books.FirstOrDefault(b => b.Id == request.BookId);
+                var book = Core.Context.Books.FirstOrDefault(x => x.Id == request.BookId);
                 if (book != null)
-                {
                     book.IsFrozen = false;
-                    Core.Context.SaveChanges();
-                }
             }
-            else
+            if (request.UserId != null)
             {
-                var user = Core.Context.Users.FirstOrDefault(u => u.Id == request.UserId);
+                var user = Core.Context.Users.FirstOrDefault(x => x.Id == request.UserId);
                 if (user != null)
-                {
                     user.IsFrozen = false;
-                    Core.Context.SaveChanges();
-                }
             }
+            Core.Context.SaveChanges();
             LoadUnfreezeRequests();
+            LoadFrozenObjects();
         }
         private void BtnRejectUnfreeze_Click(object sender, RoutedEventArgs e)
         {
-            var request = ((Button)sender).DataContext as UnfreezeApplications;
-            if (request == null) return;
-
+            var request = (sender as Button).DataContext as UnfreezeApplications;
+            if (request == null)
+                return;
             request.IsConfirmed = false;
             Core.Context.SaveChanges();
             LoadUnfreezeRequests();
         }
         private void BtnAcceptAuthorApp_Click(object sender, RoutedEventArgs e)
         {
-            var app = ((Button)sender).DataContext as AuthorApplications;
-            if (app == null) return;
-
+            var app = (sender as Button).DataContext as AuthorApplications;
+            if (app == null)
+                return;
             app.StatusId = 2;
-            Core.Context.SaveChanges();
-
-            var user = Core.Context.Users.FirstOrDefault(u => u.Id == app.UserId);
+            var user = Core.Context.Users.FirstOrDefault(x => x.Id == app.UserId);
             if (user != null)
-            {
                 user.RoleId = 2;
-                Core.Context.SaveChanges();
-            }
+            Core.Context.SaveChanges();
             LoadAuthorRequests();
+            LoadUsers();
         }
         private void BtnRejectAuthorApp_Click(object sender, RoutedEventArgs e)
         {
-            var app = ((Button)sender).DataContext as AuthorApplications;
-            if (app == null) return;
-
+            var app = (sender as Button).DataContext as AuthorApplications;
+            if (app == null)
+                return;
             app.StatusId = 3;
             Core.Context.SaveChanges();
             LoadAuthorRequests();
         }
         private void CmbRole_Loaded(object sender, RoutedEventArgs e)
         {
-            var comboBox = (ComboBox)sender;
+            ComboBox comboBox = sender as ComboBox;
             if (comboBox.Items.Count == 0)
             {
                 comboBox.Items.Add("Читатель");
                 comboBox.Items.Add("Автор");
                 comboBox.Items.Add("Администратор");
             }
-            var user = comboBox.DataContext as Users;
-            if (user != null && user.Roles != null)
-            {
+            Users user = comboBox.DataContext as Users;
+            if (user != null)
                 comboBox.SelectedItem = user.Roles.RoleName;
-            }
         }
         private void CmbRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var comboBox = (ComboBox)sender;
-            var user = comboBox.DataContext as Users;
-            if (user == null || comboBox.SelectedItem == null) return;
-
-            string newRole = comboBox.SelectedItem.ToString();
-            int newRoleId = (newRole == "Автор") ? 2 : (newRole == "Администратор") ? 3 : 1;
-
-            if (user.RoleId != newRoleId)
-            {
-                user.RoleId = newRoleId;
-                Core.Context.SaveChanges();
-                var main = Application.Current.MainWindow as MainWindow;
-                main?.MainFrame.Refresh();
-                LoadAllUsers();
-            }
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox == null || comboBox.SelectedItem == null)
+                return;
+            Users user = comboBox.DataContext as Users;
+            if (user == null)
+                return;
+            string selectedRole = comboBox.SelectedItem.ToString();
+            int roleId = 1;
+            if (selectedRole == "Автор")
+                roleId = 2;
+            if (selectedRole == "Администратор")
+                roleId = 3;
+            if (user.RoleId == roleId)
+                return;
+            user.RoleId = roleId;
+            user.Roles = Core.Context.Roles.FirstOrDefault(x => x.Id == roleId);
+            Core.Context.SaveChanges();
+            LoadUsers();
         }
         private void BtnOpenPasswordWindow_Click(object sender, RoutedEventArgs e)
         {
-            var btn = (Button)sender;
-            var user = btn.DataContext as Users;
-            if (user == null) return;
-            var window = new ChangePasswordWindow(user);
+            Users user = (sender as Button).DataContext as Users;
+            if (user == null)
+                return;
+            ChangePasswordWindow window = new ChangePasswordWindow(user);
             window.ShowDialog();
+        }
+        private void BtnUnfreezeBook_Click(object sender, RoutedEventArgs e)
+        {
+            Books book = (sender as Button).DataContext as Books;
+            if (book == null)
+                return;
+            book.IsFrozen = false;
+            Core.Context.SaveChanges();
+            LoadFrozenObjects();
+        }
+        private void BtnUnfreezeUser_Click(object sender, RoutedEventArgs e)
+        {
+            Users user = (sender as Button).DataContext as Users;
+            if (user == null)
+                return;
+            user.IsFrozen = false;
+            Core.Context.SaveChanges();
+            LoadFrozenObjects();
+        }
+        private void BtnUnfreezeReview_Click(object sender, RoutedEventArgs e)
+        {
+            Reviews review = (sender as Button).DataContext as Reviews;
+            if (review == null)
+                return;
+            review.IsFrozen = false;
+            Core.Context.SaveChanges();
+            LoadFrozenObjects();
         }
     }
 }
