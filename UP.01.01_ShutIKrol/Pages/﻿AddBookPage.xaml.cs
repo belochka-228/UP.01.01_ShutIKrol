@@ -49,6 +49,15 @@ namespace UP._01._01_ShutIKrol.Pages
                 RefreshGenres();
             }
         }
+        private void BtnDeleteGenre_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (Button)sender;
+            var genre = btn.DataContext as Genres;
+            if (genre == null) return;
+
+            _selectedGenres.Remove(genre);
+            RefreshGenres();
+        }
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             string coverPath = TxtCoverPath.Text.Trim();

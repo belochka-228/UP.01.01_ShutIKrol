@@ -36,7 +36,14 @@
             <ListBox x:Name="ListBoxGenres">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Name}"/>
+                            <Button x:Name="BtnDeleteGenre" Grid.Column="1" Margin="10 0 0 0" Content="Удалить" FontSize="10" Click="BtnDeleteGenre_Click"/>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

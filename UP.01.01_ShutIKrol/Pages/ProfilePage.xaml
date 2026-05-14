@@ -30,7 +30,7 @@
         <ListBox Grid.Row="2" x:Name="ListBoxReviews">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border BorderBrush="#E0E0E0" Padding="10" Margin="0,0,0,8">
+                    <Border BorderBrush="#E0E0E0" Padding="10" Margin="0,0,0,8" MouseLeftButtonDown="Border_MouseLeftButtonDown">
                         <StackPanel>
                             <StackPanel Orientation ="Horizontal">
                                 <TextBlock Text="{Binding Books.Title}" FontWeight="Bold" FontSize="14"/>

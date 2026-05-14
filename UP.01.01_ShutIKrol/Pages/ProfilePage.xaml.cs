@@ -95,5 +95,22 @@ namespace UP._01._01_ShutIKrol.Pages
                 }
             }
         }
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var border = (Border)sender;
+            var review = border.DataContext as Reviews;
+
+            if (review == null) return;
+            if (review.IsFrozen)
+            {
+                MessageBox.Show("Этот отзыв заморожен и недоступен для просмотра.", "Доступ ограничен", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            if (review.Books != null)
+            {
+                var mainWindow = Application.Current.MainWindow as MainWindow;
+                mainWindow?.MainFrame.Navigate(new BookDetailPage(review.Books));
+            }
+         }
     }
-}
+} 

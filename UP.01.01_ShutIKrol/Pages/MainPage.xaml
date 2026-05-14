@@ -40,9 +40,12 @@
                 <Button ToolTip="Профиль" Width="60" Height="40" Click="BtnProfile_Click" Style="{StaticResource ImageButtonStyle}">
                     <Image Source="/Images/profil.png"></Image>
                 </Button>
-                
             </StackPanel>
         </Border>
+
+        <Button ToolTip="Выход из профиля" Width="60" Height="40" VerticalAlignment="Bottom" Click="BtnBack_Click" Style="{StaticResource ImageButtonStyle}">
+            <Image Source="/Images/back.png"></Image>
+        </Button>
 
         <Frame x:Name="ContentFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
     </Grid>
