@@ -17,34 +17,34 @@
         <Border Grid.Column="0" Background="#FFF0F0F0">
             <StackPanel VerticalAlignment="Top" Margin="0,10,0,0">
 
-                <Button ToolTip="Каталог книг" Width="60" Height="40" Click="BtnCatalog_Click" Style="{StaticResource ImageButtonStyle}">
+                <Button ToolTip="Каталог книг" Width="70" Height="50" Click="BtnCatalog_Click" Style="{StaticResource ImageButtonStyle}">
                     <Image Source="/Images/catalog.png"></Image>
                 </Button>
 
-                <Button ToolTip="Мои списки" Width="60" Height="40" Click="BtnLists_Click" Style="{StaticResource ImageButtonStyle}">
-                    <Image Source="/Images/spiski.png"></Image>
+                <Button ToolTip="Мои списки" Width="70" Height="50" Click="BtnLists_Click" Style="{StaticResource ImageButtonStyle}">
+                    <Image Source="/Images/spiski (1).png" > </Image>
                 </Button>
 
-                <Button x:Name="BtnAdmin" ToolTip="Администрирование" Width="60" Height="40" Click="BtnAdmin_Click" Visibility="Collapsed" Style="{StaticResource ImageButtonStyle}">
-                    <Image Source="/Images/param.png"></Image>
+                <Button x:Name="BtnAdmin" ToolTip="Администрирование" Width="70" Height="50" Click="BtnAdmin_Click" Visibility="Collapsed" Style="{StaticResource ImageButtonStyle}">
+                    <Image Source="/Images/param (1).png"></Image>
                 </Button>
 
-                <Button x:Name="BtnAuthor" ToolTip="Страница автора" Width="60" Height="40" Click="BtnAuthor_Click" Visibility="Collapsed" Style="{StaticResource ImageButtonStyle}">
-                    <Image Source="/Images/author.png"></Image>
+                <Button x:Name="BtnAuthor" ToolTip="Страница автора" Width="70" Height="50" Click="BtnAuthor_Click" Visibility="Collapsed" Style="{StaticResource ImageButtonStyle}">
+                    <Image Source="/Images/author (1).png"></Image>
                 </Button>
 
-                <Button x:Name="BtnFrozen" ToolTip="Аккаунт заморожен" Width="60" Height="40" Click="BtnFrozen_Click" Visibility="Collapsed" Style="{StaticResource ImageButtonStyle}">
-                    <Image Source="/Images/signal.png"></Image>
+                <Button x:Name="BtnFrozen" ToolTip="Аккаунт заморожен" Width="70" Height="50" Click="BtnFrozen_Click" Visibility="Collapsed" Style="{StaticResource ImageButtonStyle}">
+                    <Image Source="/Images/signal (2).png"></Image>
                 </Button>
 
-                <Button ToolTip="Профиль" Width="60" Height="40" Click="BtnProfile_Click" Style="{StaticResource ImageButtonStyle}">
-                    <Image Source="/Images/profil.png"></Image>
+                <Button ToolTip="Профиль" Width="70" Height="50" Click="BtnProfile_Click" Style="{StaticResource ImageButtonStyle}">
+                    <Image Source="/Images/profil (1).png"></Image>
                 </Button>
             </StackPanel>
         </Border>
 
-        <Button ToolTip="Выход из профиля" Width="60" Height="40" VerticalAlignment="Bottom" Click="BtnBack_Click" Style="{StaticResource ImageButtonStyle}">
-            <Image Source="/Images/back.png"></Image>
+        <Button ToolTip="Выход из профиля" Width="70" Height="50" VerticalAlignment="Bottom" Click="BtnBack_Click" Style="{StaticResource ImageButtonStyle}">
+            <Image Source="/Images/back (1).png"></Image>
         </Button>
 
         <Frame x:Name="ContentFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>

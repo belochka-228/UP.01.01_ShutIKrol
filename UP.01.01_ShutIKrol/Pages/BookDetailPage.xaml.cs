@@ -20,7 +20,6 @@ namespace UP._01._01_ShutIKrol.Pages
     {
         private Books _book;
         private List<ComplaintTargetTypes> _complaintTargetTypes;
-        private List<Reviews> _reviews;
         public BookDetailPage(Books book)
         {
             InitializeComponent();

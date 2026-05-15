@@ -105,7 +105,7 @@ namespace UP._01._01_ShutIKrol.Pages
                 if (book != null)
                     book.IsFrozen = false;
             }
-            if (request.UserId != null)
+            else
             {
                 var user = Core.Context.Users.FirstOrDefault(x => x.Id == request.UserId);
                 if (user != null)

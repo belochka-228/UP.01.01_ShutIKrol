@@ -20,9 +20,13 @@ namespace UP._01._01_ShutIKrol.Pages
     /// </summary>
     public partial class WindowReadText : Window
     {
+        /// <summary>
+        /// конструктор окна, принимает текст книги
+        /// </summary>
         public WindowReadText(string text)
         {
             InitializeComponent();
+            // привязываем переданный текст к окну
             this.DataContext = new { Content = text };
         }
         private void ButtonBack_Click(object sender, RoutedEventArgs e)

@@ -295,19 +295,19 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\spiski.png" />
     <Resource Include="Images\catalog.png" />
     <Resource Include="Images\Kniga4.png" />
     <Resource Include="Images\Kniga2.png" />
     <Resource Include="Images\Kniga1.png" />
     <Resource Include="Images\Kniga3.png" />
-    <Resource Include="Images\param.png" />
-    <Resource Include="Images\author.png" />
-    <Resource Include="Images\signal.png" />
-    <Resource Include="Images\profil.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\back.png" />
+    <Resource Include="Images\spiski %281%29.png" />
+    <Resource Include="Images\profil %281%29.png" />
+    <Resource Include="Images\back %281%29.png" />
+    <Resource Include="Images\author %281%29.png" />
+    <Resource Include="Images\param %281%29.png" />
+    <Resource Include="Images\signal %282%29.png" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
