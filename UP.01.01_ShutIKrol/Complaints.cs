@@ -21,6 +21,7 @@ namespace UP._01._01_ShutIKrol
         public int BookId { get; set; }
         public System.DateTime CreatedAt { get; set; }
         public Nullable<bool> IsConfirmed { get; set; }
+        public Nullable<int> TargetId { get; set; }
     
         public virtual Books Books { get; set; }
         public virtual ComplaintReasons ComplaintReasons { get; set; }

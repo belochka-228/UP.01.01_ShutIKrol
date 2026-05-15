@@ -25,12 +25,16 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             InitializeComponent();
             _entry = entry; //сохраняем
-            DataContext = _entry; //контекст данных
+            DataContext = _entry; // для отображения названия книги
             var statuses = Core.Context.StatusBooks.ToList();
             CmbStatuses.ItemsSource = statuses; //устанавливаем список
             CmbStatuses.SelectedItem = statuses.FirstOrDefault(s => s.Id == _entry.StatusId); //текущий как выбранный
         }
-
+        /// <summary>
+        /// кнопочка "Переместить"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnMove_Click(object sender, RoutedEventArgs e)
         {
             if (CmbStatuses.SelectedItem is StatusBooks newStatus)

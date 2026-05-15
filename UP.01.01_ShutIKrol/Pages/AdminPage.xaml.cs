@@ -17,16 +17,19 @@ using System.Windows.Shapes;
 namespace UP._01._01_ShutIKrol.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для AdminPage.xaml
+    /// страница админа
     /// </summary>
     public partial class AdminPage : Page
     {
         public AdminPage()
         {
             InitializeComponent();
-            DataContext = UserData.CurrentUser;
+            DataContext = UserData.CurrentUser; // данные админа в заголовке
             LoadData();
         }
+        /// <summary>
+        /// загрузка всех разделов админки
+        /// </summary>
         private void LoadData()
         {
             LoadComplaints();
@@ -35,55 +38,82 @@ namespace UP._01._01_ShutIKrol.Pages
             LoadFrozenObjects();
             LoadUsers();
         }
-
+        /// <summary>
+        /// загрузка необработанных жалоб
+        /// </summary>
         private void LoadComplaints()
         {
             ListBoxComplaints.ItemsSource = Core.Context.Complaints.Where(x => x.IsConfirmed == null).Include(x => x.Users).Include(x => x.ComplaintReasons).Include(x => x.ComplaintTargetTypes).Include(x => x.Books).ToList();
         }
+        /// <summary>
+        /// загрузка необработанных заявок на разморозку
+        /// </summary>
         private void LoadUnfreezeRequests()
         {
             ListBoxUnfreeze.ItemsSource = Core.Context.UnfreezeApplications.Where(x => x.IsConfirmed == null).Include(x => x.Users).Include(x => x.Books).ToList();
         }
+        /// <summary>
+        /// загрузка заявок на роль автора
+        /// </summary>
         private void LoadAuthorRequests()
         {
             ListBoxAuthorApps.ItemsSource = Core.Context.AuthorApplications.Where(x => x.StatusId == 1).Include(x => x.Users).ToList();
         }
+        /// <summary>
+        /// загрузка всех замороженных объектов
+        /// </summary>
         private void LoadFrozenObjects()
         {
             ListBoxFrozenBooks.ItemsSource = Core.Context.Books.Where(x => x.IsFrozen).Include(x => x.Users).ToList();
             ListBoxFrozenUsers.ItemsSource = Core.Context.Users.Where(x => x.IsFrozen).Include(x => x.Roles).ToList();
             ListBoxFrozenReviews.ItemsSource = Core.Context.Reviews.Where(x => x.IsFrozen).Include(x => x.Users).Include(x => x.Books).ToList();
         }
+        /// <summary>
+        /// загрузка всех пользователей
+        /// </summary>
         private void LoadUsers()
         {
             ListBoxAllUsers.ItemsSource = Core.Context.Users.Include(x => x.Roles).ToList();
         }
+        /// <summary>
+        /// принять жалобу и заморозить
+        /// </summary>
         private void BtnAcceptComplaint_Click(object sender, RoutedEventArgs e)
         {
             var complaint = (sender as Button).DataContext as Complaints;
-            if (complaint == null)
-                return;
+            if (complaint == null) return;
+
             complaint.IsConfirmed = true;
-            if (complaint.TargetTypeId == 1)
+
+            if (complaint.TargetTypeId == 1) // книга
             {
                 var book = Core.Context.Books.FirstOrDefault(x => x.Id == complaint.BookId);
-                if (book != null)
-                    book.IsFrozen = true;
+                if (book != null) book.IsFrozen = true;
             }
-            if (complaint.TargetTypeId == 3)
+
+            if (complaint.TargetTypeId == 3) // автор
             {
                 var book = Core.Context.Books.FirstOrDefault(x => x.Id == complaint.BookId);
                 if (book != null)
                 {
                     var user = Core.Context.Users.FirstOrDefault(x => x.Id == book.AuthorId);
-                    if (user != null)
-                        user.IsFrozen = true;
+                    if (user != null) user.IsFrozen = true;
                 }
             }
+
+            if (complaint.TargetTypeId == 2 && complaint.TargetId != null) // отзыв
+            {
+                var review = Core.Context.Reviews.FirstOrDefault(x => x.Id == complaint.TargetId);
+                if (review != null) review.IsFrozen = true;
+            }
+
             Core.Context.SaveChanges();
             LoadComplaints();
             LoadFrozenObjects();
         }
+        /// <summary>
+        /// отклонить жалобу
+        /// </summary>
         private void BtnRejectComplaint_Click(object sender, RoutedEventArgs e)
         {
             var complaint = (sender as Button).DataContext as Complaints;
@@ -93,6 +123,9 @@ namespace UP._01._01_ShutIKrol.Pages
             Core.Context.SaveChanges();
             LoadComplaints();
         }
+        /// <summary>
+        /// принять заявку на разморозку и снять заморозку
+        /// </summary>
         private void BtnAcceptUnfreeze_Click(object sender, RoutedEventArgs e)
         {
             var request = (sender as Button).DataContext as UnfreezeApplications;
@@ -115,6 +148,9 @@ namespace UP._01._01_ShutIKrol.Pages
             LoadUnfreezeRequests();
             LoadFrozenObjects();
         }
+        /// <summary>
+        /// отклонить заявку на разморозку
+        /// </summary>
         private void BtnRejectUnfreeze_Click(object sender, RoutedEventArgs e)
         {
             var request = (sender as Button).DataContext as UnfreezeApplications;
@@ -124,6 +160,9 @@ namespace UP._01._01_ShutIKrol.Pages
             Core.Context.SaveChanges();
             LoadUnfreezeRequests();
         }
+        /// <summary>
+        /// одобрить заявку на роль автора
+        /// </summary>
         private void BtnAcceptAuthorApp_Click(object sender, RoutedEventArgs e)
         {
             var app = (sender as Button).DataContext as AuthorApplications;
@@ -137,6 +176,9 @@ namespace UP._01._01_ShutIKrol.Pages
             LoadAuthorRequests();
             LoadUsers();
         }
+        /// <summary>
+        /// отклонить заявку на роль автора
+        /// </summary>
         private void BtnRejectAuthorApp_Click(object sender, RoutedEventArgs e)
         {
             var app = (sender as Button).DataContext as AuthorApplications;
@@ -146,6 +188,9 @@ namespace UP._01._01_ShutIKrol.Pages
             Core.Context.SaveChanges();
             LoadAuthorRequests();
         }
+        /// <summary>
+        /// загрузка списка ролей
+        /// </summary>
         private void CmbRole_Loaded(object sender, RoutedEventArgs e)
         {
             ComboBox comboBox = sender as ComboBox;
@@ -159,6 +204,9 @@ namespace UP._01._01_ShutIKrol.Pages
             if (user != null)
                 comboBox.SelectedItem = user.Roles.RoleName;
         }
+        /// <summary>
+        /// смена роли пользователя
+        /// </summary>
         private void CmbRole_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = sender as ComboBox;
@@ -180,6 +228,9 @@ namespace UP._01._01_ShutIKrol.Pages
             Core.Context.SaveChanges();
             LoadUsers();
         }
+        /// <summary>
+        /// окно смены пароля для выбранного пользователя
+        /// </summary>
         private void BtnOpenPasswordWindow_Click(object sender, RoutedEventArgs e)
         {
             Users user = (sender as Button).DataContext as Users;
@@ -188,6 +239,9 @@ namespace UP._01._01_ShutIKrol.Pages
             ChangePasswordWindow window = new ChangePasswordWindow(user);
             window.ShowDialog();
         }
+        /// <summary>
+        /// разморозить книгу напрямую
+        /// </summary>
         private void BtnUnfreezeBook_Click(object sender, RoutedEventArgs e)
         {
             Books book = (sender as Button).DataContext as Books;
@@ -197,6 +251,9 @@ namespace UP._01._01_ShutIKrol.Pages
             Core.Context.SaveChanges();
             LoadFrozenObjects();
         }
+        /// <summary>
+        /// разморозить пользователя напрямую
+        /// </summary>
         private void BtnUnfreezeUser_Click(object sender, RoutedEventArgs e)
         {
             Users user = (sender as Button).DataContext as Users;
@@ -206,6 +263,9 @@ namespace UP._01._01_ShutIKrol.Pages
             Core.Context.SaveChanges();
             LoadFrozenObjects();
         }
+        /// <summary>
+        /// разморозить отзыв напрямую
+        /// </summary>
         private void BtnUnfreezeReview_Click(object sender, RoutedEventArgs e)
         {
             Reviews review = (sender as Button).DataContext as Reviews;

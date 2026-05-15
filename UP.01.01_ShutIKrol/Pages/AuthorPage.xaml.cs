@@ -16,73 +16,84 @@ using System.Windows.Shapes;
 namespace UP._01._01_ShutIKrol.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для AuthorPage.xaml
+    /// страница автора
     /// </summary>
-        public partial class AuthorPage : Page
+    public partial class AuthorPage : Page
+    {
+        private List<Books> _activeBooks;
+        private List<Books> _frozenBooks;
+        public AuthorPage()
         {
-            private List<Books> _activeBooks;
-            private List<Books> _frozenBooks;
-            public AuthorPage()
+            InitializeComponent();
+            LoadData();
+        }
+        /// <summary>
+        /// загрузка активных и замороженных книг текущего автора
+        /// </summary>
+        private void LoadData()
+        {
+            int currentUserId = UserData.CurrentUser.Id;
+            if (UserData.CurrentUser.IsFrozen)
             {
-                InitializeComponent();
-                LoadData();
+                BtnAddNewBook.IsEnabled = false;
+                BtnAddNewBook.ToolTip = "Добавление книг недоступно (аккаунт заморожен)";
             }
-            private void LoadData()
+            // загружаем активные
+            _activeBooks = Core.Context.Books.Where(b => b.AuthorId == currentUserId && !b.IsFrozen).ToList();
+            ListBoxBooks.ItemsSource = _activeBooks;
+            // загружаем замороженные
+            _frozenBooks = Core.Context.Books.Where(b => b.AuthorId == currentUserId && b.IsFrozen).ToList();
+            ListBoxFrozenBooks.ItemsSource = _frozenBooks;
+        }
+        private void BtnAddNewBook_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new __AddBookPage());
+        }
+        /// <summary>
+        /// открыть окно редактирования
+        /// </summary>
+        private void BtnEditBook_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = (Button)sender;
+            if (btn.DataContext is Books selectedBook)
             {
-                int currentUserId = UserData.CurrentUser.Id;
-                if (UserData.CurrentUser.IsFrozen)
-                {
-                    BtnAddNewBook.IsEnabled = false;
-                    BtnAddNewBook.ToolTip = "Добавление книг недоступно (аккаунт заморожен)";
-                }
-                _activeBooks = Core.Context.Books.Where(b => b.AuthorId == currentUserId && !b.IsFrozen).ToList();
-                ListBoxBooks.ItemsSource = _activeBooks;
-                _frozenBooks = Core.Context.Books.Where(b => b.AuthorId == currentUserId && b.IsFrozen).ToList();
-                ListBoxFrozenBooks.ItemsSource = _frozenBooks;
+                var window = new EditWindow(selectedBook);
+                window.Owner = Window.GetWindow(this);
+                window.ShowDialog();
             }
-            private void BtnAddNewBook_Click(object sender, RoutedEventArgs e)
+        }
+        /// <summary>
+        /// оспорить заморозку книги
+        /// </summary>
+        private void BtnDefrozeBook_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            if (btn.DataContext is Books selectedBook)
             {
-                NavigationService?.Navigate(new __AddBookPage());
-            }
-            private void BtnEditBook_Click(object sender, RoutedEventArgs e)
-            {
-                var btn = (Button)sender;
-                if (btn.DataContext is Books selectedBook)
-                {
-                    var window = new EditWindow(selectedBook);
-                    window.Owner = Window.GetWindow(this);
-                    window.ShowDialog();
-                }
-            }
-            private void BtnDefrozeBook_Click(object sender, RoutedEventArgs e)
-            {
-                Button btn = (Button)sender;
-                if (btn.DataContext is Books selectedBook)
-                {
-                    MessageBoxResult result = MessageBox.Show($"Оспорить заморозку книги «{selectedBook.Title}»?", "Оспаривание заморозки", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult result = MessageBox.Show($"Оспорить заморозку книги «{selectedBook.Title}»?", "Оспаривание заморозки", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-                    if (result == MessageBoxResult.Yes)
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
                     {
-                        try
+                        var request = new UnfreezeApplications
                         {
-                            var request = new UnfreezeApplications
-                            {
-                                UserId = UserData.CurrentUser.Id,
-                                Reason = "Оспаривание заморозки книги",
-                                StatusId = 1,
-                                CreatedAt = DateTime.Now,
-                                BookId = selectedBook.Id
-                            };
-                            Core.Context.UnfreezeApplications.Add(request);
-                            Core.Context.SaveChanges();
-                            MessageBox.Show("Заявка на разморозку отправлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка",   MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                            UserId = UserData.CurrentUser.Id,
+                            Reason = "Оспаривание заморозки книги",
+                            StatusId = 1,
+                            CreatedAt = DateTime.Now,
+                            BookId = selectedBook.Id
+                        };
+                        Core.Context.UnfreezeApplications.Add(request);
+                        Core.Context.SaveChanges();
+                        MessageBox.Show("Заявка на разморозку отправлена.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка",   MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
         }
     }
+}

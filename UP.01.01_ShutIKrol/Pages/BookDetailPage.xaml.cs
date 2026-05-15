@@ -16,15 +16,18 @@ using System.Windows.Shapes;
 
 namespace UP._01._01_ShutIKrol.Pages
 {
+    /// <summary>
+    /// страница с подробной информацией о книге
+    /// </summary>
     public partial class BookDetailPage : Page
     {
-        private Books _book;
-        private List<ComplaintTargetTypes> _complaintTargetTypes;
+        private Books _book; // тек книга
+        private List<ComplaintTargetTypes> _complaintTargetTypes;// типы жалоб
         public BookDetailPage(Books book)
         {
             InitializeComponent();
             _book = book;
-            DataContext = _book;
+            DataContext = _book;// для привязок в xaml
             double avgRating = _book.Reviews.Any() ? _book.Reviews.Average(r => r.Rating) : 0;
             TxtRating.Text = avgRating.ToString("0");
 
@@ -38,6 +41,9 @@ namespace UP._01._01_ShutIKrol.Pages
                 }
             }
         }
+        /// <summary>
+        /// загрузка незамороженных отзывов к книге
+        /// </summary>
         private void LoadReviews()
         {
             ReviewsList.Items.Clear();
@@ -47,11 +53,17 @@ namespace UP._01._01_ShutIKrol.Pages
                 ReviewsList.Items.Add(review);
             }
         }
+        /// <summary>
+        /// кнопка "заморозить отзыв" только для администратора
+        /// </summary>
         private void BtnFreezeReview_Loaded(object sender, RoutedEventArgs e)
         {
             if (UserData.CurrentUser?.Roles?.RoleName == "Администратор")
                 ((Button)sender).Visibility = Visibility.Visible;
         }
+        /// <summary>
+        /// открыть окно чтения текста книги
+        /// </summary>
         private void BtnRead_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(_book.Content))
@@ -61,18 +73,41 @@ namespace UP._01._01_ShutIKrol.Pages
                 window.Show();
             }
         }
+        /// <summary>
+        /// добавить книгу в список чтения
+        /// </summary>
         private void BtnAddToList_Click(object sender, RoutedEventArgs e)
         {
             var window = new WindowAddToList(_book);
             window.Owner = Window.GetWindow(this);
             window.ShowDialog();
         }
+        /// <summary>
+        /// подать жалобу на книгу (тип 1)
+        /// </summary>
         private void BtnComplaintBook_Click(object sender, RoutedEventArgs e)
         {
             ComplaintWindow window = new ComplaintWindow(1, _book.Title, _book.Id);
             window.Owner = Window.GetWindow(this);
             window.ShowDialog();
         }
+        /// <summary>
+        /// подать жалобу на отзыв (тип 2)
+        /// </summary>
+        private void BtnComplaintReview_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            if (btn.Tag != null)
+            {
+                int reviewId = Convert.ToInt32(btn.Tag);
+                ComplaintWindow window = new ComplaintWindow(2, $"Отзыв #{reviewId}", _book.Id, reviewId);
+                window.Owner = Window.GetWindow(this);
+                window.ShowDialog();
+            }
+        }
+        /// <summary>
+        /// подать жалобу на автора (тип 3)
+        /// </summary>  
         private void BtnComplaintAuthor_Click(object sender, RoutedEventArgs e)
         {
             string authorName = "Автор";
@@ -84,17 +119,9 @@ namespace UP._01._01_ShutIKrol.Pages
             window.Owner = Window.GetWindow(this);
             window.ShowDialog();
         }
-        private void BtnComplaintReview_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn = (Button)sender;
-            if (btn.Tag != null)
-            {
-                int reviewId = Convert.ToInt32(btn.Tag);
-                ComplaintWindow window = new ComplaintWindow(2, $"Отзыв #{reviewId}", _book.Id);
-                window.Owner = Window.GetWindow(this);
-                window.ShowDialog();
-            }
-        }
+        /// <summary>
+        /// новый отзыв к книге
+        /// </summary>
         private void BtnSubmitReview_Click(object sender, RoutedEventArgs e)
         {
             string text = TxtNewReview.Text.Trim();
@@ -116,11 +143,14 @@ namespace UP._01._01_ShutIKrol.Pages
             };
             Core.Context.Reviews.Add(newReview);
             Core.Context.SaveChanges();
-            TxtNewReview.Clear();
+            TxtNewReview.Clear(); // очищаем форму и обновляем список отзывов
             CmbRating.SelectedIndex = 0;
             LoadReviews();
-            UpdateAverageRating();
+            UpdateAverageRating(); // обновляем рейтинг
         }
+        /// <summary>
+        /// пересчёт и отображение среднего рейтинга книги
+        /// </summary>
         private void UpdateAverageRating()
         {
             double avgRating = 0;
@@ -135,6 +165,9 @@ namespace UP._01._01_ShutIKrol.Pages
             }
             TxtRating.Text = Math.Round(avgRating).ToString();
         }
+        /// <summary>
+        /// заморозить книгу (только для админа)
+        /// </summary>
         private void BtnFreezeBook_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show($"Заморозить книгу «{_book.Title}»?","Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -145,6 +178,9 @@ namespace UP._01._01_ShutIKrol.Pages
                 MessageBox.Show("Книга заморожена.");
             }
         }
+        /// <summary>
+        /// заморозить отзыв (такнж для админа)
+        /// </summary>
         private void BtnFreezeReview_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;

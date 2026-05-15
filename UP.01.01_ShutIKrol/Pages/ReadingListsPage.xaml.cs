@@ -29,9 +29,13 @@ namespace UP._01._01_ShutIKrol.Pages
             InitializeComponent();
             LoadData();
         }
+        /// <summary>
+        /// загрузка всех книг, статусов и жанров
+        /// </summary>
         private void LoadData()
         {
             int userId = UserData.CurrentUser.Id;
+            // все записи пользователя из ReadingLists
             _allUserBooks = Core.Context.ReadingLists.Where(r => r.UserId == userId).Include("Books.Users").ToList();
 
             _statuses = Core.Context.StatusBooks.ToList();
@@ -45,6 +49,7 @@ namespace UP._01._01_ShutIKrol.Pages
             CmbGenres.DisplayMemberPath = "Name";
             CmbGenres.SelectedIndex = 0;
         }
+        // обработчики, которые вызывают обновление списка при любом изменении фильтров
         private void CmbGenres_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateList();
@@ -61,21 +66,24 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             UpdateList();
         }
+        /// <summary>
+        /// обновление списка книг со всеми фильтрами и сортировками
+        /// </summary>
         private void UpdateList()
         {
             if (_allUserBooks == null) return;
             var filtered = _allUserBooks.AsEnumerable();
-
+            // фильтр по статусу
             if (ListBoxStatuses.SelectedItem is StatusBooks selectedStatus && selectedStatus.Id != 0)
                 filtered = filtered.Where(r => r.StatusId == selectedStatus.Id);
-
+            // поиск по названию и автору
             string text = TxtSearch.Text.ToLower();
             if (!string.IsNullOrWhiteSpace(text))
                 filtered = filtered.Where(r => r.Books.Title.ToLower().Contains(text) || r.Books.Users.DisplayName.ToLower().Contains(text));
-
+            // фильтр по жанру
             if (CmbGenres.SelectedItem is Genres selectedGenre && selectedGenre.Id != 0)
                 filtered = filtered.Where(r => r.Books.BookGenres.Any(bg => bg.GenreId == selectedGenre.Id));
-
+            // сортировка
             switch (CmbSort.SelectedIndex)
             {
                 case 1:
@@ -89,6 +97,9 @@ namespace UP._01._01_ShutIKrol.Pages
             }
             ListBoxBooks.ItemsSource = filtered.ToList();
         }
+        /// <summary>
+        /// нажатие на кнопку "переместить", открывает окно для смены статуса
+        /// </summary>
         private void BtnMove_Click(object sender, RoutedEventArgs e)
         {
             if (((Button)sender).DataContext is ReadingLists selectedEntry)
@@ -99,6 +110,9 @@ namespace UP._01._01_ShutIKrol.Pages
                 UpdateList();
             }
         }
+        /// <summary>
+        /// переход на страницу книги
+        /// </summary>
         private void ListBoxBooks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (ListBoxBooks.SelectedItem is ReadingLists entry)

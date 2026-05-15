@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace UP._01._01_ShutIKrol.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для MainPage.xaml
+    /// главная страница с боковым меню
     /// </summary>
     public partial class MainPage : Page
     {
@@ -31,11 +31,13 @@ namespace UP._01._01_ShutIKrol.Pages
             {
                 BtnAuthor.Visibility = Visibility.Visible;
             }
+            //если аккаунт заморожен
             if (UserData.CurrentUser.IsFrozen)
             {
                 BtnFrozen.Visibility = Visibility.Visible;
             }
-        ContentFrame.Navigate(new CatalogPage());
+            // по умолчанию открываем каталог
+            ContentFrame.Navigate(new CatalogPage());
         }
         private void BtnCatalog_Click(object sender, RoutedEventArgs e)
         {

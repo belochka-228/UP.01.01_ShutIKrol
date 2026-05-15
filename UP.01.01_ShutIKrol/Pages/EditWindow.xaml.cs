@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace UP._01._01_ShutIKrol.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для EditWindow.xaml
+    /// окно редактирования книги
     /// </summary>
     public partial class EditWindow : Window
 {
@@ -30,6 +30,9 @@ namespace UP._01._01_ShutIKrol.Pages
             DataContext = _book;
             RefreshData();
         }
+        /// <summary>
+        /// обновление списков жанров и доступных жанров
+        /// </summary>
         private void RefreshData()
         {
             _bookGenres = Core.Context.BookGenres.Where(bg => bg.BookId == _book.Id).Include("Genres").ToList(); // получаем жанры книги из базы
@@ -42,6 +45,9 @@ namespace UP._01._01_ShutIKrol.Pages
             CmbGenre.ItemsSource = _availableGenres;
             CmbGenre.SelectedIndex = _availableGenres.Any() ? 0 : -1;
         }
+        /// <summary>
+        /// добавление жанра книге
+        /// </summary>
         private void BtnAddGenre_Click(object sender, RoutedEventArgs e)
         {
             if (CmbGenre.SelectedItem == null) return;
@@ -73,6 +79,9 @@ namespace UP._01._01_ShutIKrol.Pages
             _bookGenres.Add(newBookGenre);
             RefreshData();
         }
+        /// <summary>
+        /// удаление жанра у книги
+        /// </summary>  
         private void BtnDeleteGenre_Click(object sender, RoutedEventArgs e)
         {
             var btn = (Button)sender;
@@ -85,6 +94,9 @@ namespace UP._01._01_ShutIKrol.Pages
             _bookGenres.Remove(bookGenre);
             RefreshData();           
         }
+        /// <summary>
+        /// сохранение изменений книги
+        /// </summary>
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TxtBoxCoverPath.Text) ||

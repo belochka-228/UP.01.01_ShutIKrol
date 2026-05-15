@@ -308,6 +308,8 @@
     <Resource Include="Images\author %281%29.png" />
     <Resource Include="Images\param %281%29.png" />
     <Resource Include="Images\signal %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>

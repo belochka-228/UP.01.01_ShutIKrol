@@ -16,17 +16,23 @@ using UP._01._01_ShutIKrol;
 
 namespace UP._01._01_ShutIKrol.Pages
 {
+    /// <summary>
+    /// страница каталога книг
+    /// </summary>
     public partial class CatalogPage : Page
     {
-        private List<Books> _allBooks;
+        private List<Books> _allBooks; // незамороженные книги
         public CatalogPage()
         {
             InitializeComponent();
             LoadData();
         }
+        /// <summary>
+        /// загрузка книг и заполнение списка жанров
+        /// </summary>
         private void LoadData()
-        {
-            _allBooks = Core.Context.Books.Where(b => !b.IsFrozen).ToList();
+        { 
+            _allBooks = Core.Context.Books.Where(b => !b.IsFrozen).ToList(); // получаем все книги, которые не заморожены
             ListBoxBooks.ItemsSource = _allBooks;
 
             var genres = Core.Context.Genres.ToList();
@@ -37,19 +43,21 @@ namespace UP._01._01_ShutIKrol.Pages
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e) => ApplyFilters();
         private void CmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e) => ApplyFilters();
         private void CmbGenres_SelectionChanged(object sender, SelectionChangedEventArgs e) => ApplyFilters();
-
+        /// <summary>
+        /// применение фильтров к списку книг
+        /// </summary>
         private void ApplyFilters()
         {
             if (_allBooks == null) return;
             var filtered = _allBooks.AsEnumerable();
-
+            // поиск по названию или имени автора
             string text = TxtSearch.Text.ToLower();
             if (!string.IsNullOrWhiteSpace(text))
                 filtered = filtered.Where(b => b.Title.ToLower().Contains(text) || b.Users.DisplayName.ToLower().Contains(text));
-
+            // фильтр по жанру
             if (CmbGenres.SelectedItem is Genres genre && genre.Id != 0)
                 filtered = filtered.Where(b => b.BookGenres.Any(bg => bg.GenreId == genre.Id));
-
+            // сортировка
             switch (CmbSort.SelectedIndex)
             {
                 case 1:
@@ -61,6 +69,9 @@ namespace UP._01._01_ShutIKrol.Pages
             }
             ListBoxBooks.ItemsSource = filtered.ToList();
         }
+        /// <summary>
+        /// переход на страницу книги
+        /// </summary>
         private void ListBoxBooks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (ListBoxBooks.SelectedItem is Books selectedBook)
@@ -69,6 +80,9 @@ namespace UP._01._01_ShutIKrol.Pages
                 mainWindow?.MainFrame.Navigate(new BookDetailPage(selectedBook));
             }
         }
+        /// <summary>
+        /// кнопка "добавить в список" под книгой
+        /// </summary>
         private void BtnAddToList_Click(object sender, RoutedEventArgs e)
         {
             if (((Button)sender).DataContext is Books selectedBook)

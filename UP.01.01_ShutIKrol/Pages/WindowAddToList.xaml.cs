@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace UP._01._01_ShutIKrol.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для WindowAddToList.xaml
+    /// окно добавления книги в список чтения
     /// </summary>
     public partial class WindowAddToList : Window
     {
@@ -25,16 +25,22 @@ namespace UP._01._01_ShutIKrol.Pages
         {
             InitializeComponent();
             _book = book;//сохраняем в поле
-            DataContext = _book;
+            DataContext = _book;//отображение названия в окне
             ListBoxStatuses.ItemsSource = Core.Context.StatusBooks.ToList(); 
         }
+        /// <summary>
+        /// обработчик выбора статуса, запоминаем статус
+        /// </summary>
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             _selectedStatus = ((RadioButton)sender).DataContext as StatusBooks;
         }
+        /// <summary>
+        /// обработчик кнопки "Добавить в список"
+        /// </summary>
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedStatus == null)
+            if (_selectedStatus == null) 
             {
                 MessageBox.Show("Выберите статус.");
                 return;

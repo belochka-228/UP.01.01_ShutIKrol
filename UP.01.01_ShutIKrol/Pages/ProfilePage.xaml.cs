@@ -26,6 +26,9 @@ namespace UP._01._01_ShutIKrol.Pages
             InitializeComponent();
             Loaded += ProfilePage_Loaded;
         }
+        /// <summary>
+        /// заполнение данных после загрузки страницы
+        /// </summary>
         private void ProfilePage_Loaded(object sender, RoutedEventArgs e)
         {
             var user = UserData.CurrentUser;
@@ -36,6 +39,7 @@ namespace UP._01._01_ShutIKrol.Pages
             if (user.IsFrozen)
             {
                 string reason = "Причина не указана";
+                // ищем последнюю подтверждённую жалобу на автора
                 var lastComplaint = Core.Context.Complaints.Where(c => c.TargetTypeId == 3 && c.IsConfirmed == true && c.Books.AuthorId == user.Id).OrderByDescending(c => c.CreatedAt).FirstOrDefault();
 
                 if (lastComplaint != null && lastComplaint.ComplaintReasons != null)
@@ -60,11 +64,15 @@ namespace UP._01._01_ShutIKrol.Pages
                 mainWindow?.MainFrame.Navigate(new MainPage());
                 return;
             }
+            //если не заморожен показываем данные пользователя
             DataContext = user;
 
             var reviews = Core.Context.Reviews.Where(r => r.UserId == user.Id).Include("Books").OrderByDescending(r => r.CreatedAt).ToList();
             ListBoxReviews.ItemsSource = reviews;
         }
+        /// <summary>
+        /// смена пароля для администратора
+        /// </summary>
         private void BtnChangePasswordProfile_Click(object sender, RoutedEventArgs e)
         {
             var btn = (Button)sender;
@@ -73,6 +81,9 @@ namespace UP._01._01_ShutIKrol.Pages
             var window = new ChangePasswordWindow(user);
             window.ShowDialog();
         }
+        /// <summary>
+        /// подача заявки на роль автора
+        /// </summary>
         private void BtnAuthorRequest_Click(object sender, RoutedEventArgs e)
         {
             var user = UserData.CurrentUser;
@@ -103,6 +114,9 @@ namespace UP._01._01_ShutIKrol.Pages
                 }
             }
         }
+        /// <summary>
+        /// клик по отзыву – переход на книгу, если отзыв не заморожен
+        /// </summary>
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var border = (Border)sender;

@@ -60,6 +60,7 @@
           <Property Name="BookId" Type="int" Nullable="false" />
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="IsConfirmed" Type="bit" />
+          <Property Name="TargetId" Type="int" />
         </EntityType>
         <EntityType Name="ComplaintTargetTypes">
           <Key>
@@ -524,6 +525,7 @@
           <Property Name="BookId" Type="Int32" Nullable="false" />
           <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IsConfirmed" Type="Boolean" />
+          <Property Name="TargetId" Type="Int32" />
           <NavigationProperty Name="Books" Relationship="Self.FK_Complaints_Books" FromRole="Complaints" ToRole="Books" />
           <NavigationProperty Name="ComplaintReasons" Relationship="Self.FK__Complaint__Reaso__6754599E" FromRole="Complaints" ToRole="ComplaintReasons" />
           <NavigationProperty Name="ComplaintTargetTypes" Relationship="Self.FK__Complaint__Targe__68487DD7" FromRole="Complaints" ToRole="ComplaintTargetTypes" />
@@ -1003,6 +1005,7 @@
                 <ScalarProperty Name="BookId" ColumnName="BookId" />
                 <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
                 <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="TargetId" ColumnName="TargetId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

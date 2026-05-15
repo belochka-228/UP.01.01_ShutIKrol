@@ -15,21 +15,24 @@ using System.Windows.Shapes;
 namespace UP._01._01_ShutIKrol.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для ComplaintWindow.xaml
+    /// окно для подачи жалобы на книгу, автора или отзыв
     /// </summary>
     public partial class ComplaintWindow : Window
     {
-        private int _targetTypeId;
-        private string _targetName;
-        private int _bookId;
+        private int _targetTypeId; // тип цели жалобы
+        private string _targetName; // название объекта
+        private int _bookId;  // id книги
+        private int? _targetId; // id отзыва, если жалуемся на отзыв
 
-        public ComplaintWindow(int targetTypeId, string targetName, int bookId)
+        public ComplaintWindow(int targetTypeId, string targetName, int bookId, int? targetId = null)
         {
             InitializeComponent();
 
             _targetTypeId = targetTypeId;
             _targetName = targetName;
             _bookId = bookId;
+            _targetId = targetId;
+            // определяем текст в зависимости от типа жалобы
             string typeText;
             switch (targetTypeId)
             {
@@ -38,15 +41,14 @@ namespace UP._01._01_ShutIKrol.Pages
                 case 3: typeText = "автора"; break;
                 default: typeText = "объект"; break;
             }
-
-
             TxtTargetInfo.Text = $"Жалоба на {typeText}";
             TxtTargetName.Text = targetName;
-
             CmbReasons.ItemsSource = Core.Context.ComplaintReasons.ToList();
             CmbReasons.SelectedIndex = 0;
         }
-
+        /// <summary>
+        /// отправка жалобы
+        /// </summary>
         private void BtnSend_Click(object sender, RoutedEventArgs e)
         {
             if (CmbReasons.SelectedItem == null)
@@ -67,6 +69,7 @@ namespace UP._01._01_ShutIKrol.Pages
                     TargetTypeId = _targetTypeId,
                     ReasonId = selectedReason.Id,
                     BookId = _bookId,
+                    TargetId = _targetId,
                     CreatedAt = DateTime.Now
                 };
 
